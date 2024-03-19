@@ -27,9 +27,9 @@
     name: 'CodecsForm',
     data() {
       return {
-        codec1: 'libx264',
-        codec2: 'libx265',
-        codec3: 'libvpx-vp9',
+        codec1: '',
+        codec2: '',
+        codec3: '',
       }
     },
     props: {
@@ -39,15 +39,25 @@
       }
     },
     methods: {
+      /**
+       * Runs the tests for the written codecs.
+       * @param {Event} e - The event object.
+       * @returns {Promise<void>}
+       */
       async runCodecsTests(e) {
         e.preventDefault()
         const allCodecs = [this.codec1, this.codec2, this.codec3]
         allCodecs.forEach(codec => {
-          this.uploadVideo(codec)
+          this.codecTest(codec)
         })
       },
 
-      async uploadVideo(codec) {
+      /**
+       * Sends a POST request to test a codec with the provided video file.
+       * @param {string} codec - The codec to test.
+       * @returns {Promise<void>} - A promise that resolves when the request is completed.
+       */
+      async codecTest(codec) {
         const formData = new FormData()
         formData.append('video', this.video)
         try {
@@ -61,7 +71,7 @@
         } catch (error) {
           console.error("ERROR: ", error)
         }
-      },
+      }
     }
   }
 </script>
