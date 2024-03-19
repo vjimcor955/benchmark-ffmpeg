@@ -5,10 +5,11 @@
       <div class="command__form--field">
         <label for="line">Write the ffmpeg command:</label>
         <div class="command__form--field--input">
-          ffmpeg -i <input v-model="line" type="text" id="line">
+          <p>ffmpeg -i {{ inputVideo }}</p>
+          <input v-model="line" type="text" id="line">
         </div>
       </div>
-      <input type="submit" value="Run command test" @click="runTests">
+      <input type="submit" value="Run command test" @click="runCommandTest">
     </form>
   </div>
 </template>
@@ -21,10 +22,10 @@
     name: 'CodecsForm',
     data() {
       return {
-        line: '',
+        inputVideo: this.video.name,
+        line: '-c:v libx265 results/prueba_comando.mp4',
       }
     },
-    // recieves video prompt from HomeView
     props: {
       video: {
         type: Object,
@@ -32,22 +33,19 @@
       }
     },
     methods: {
-      async runTests(e) {
+      async runCommandTest(e) {
         e.preventDefault()
-        const allCodecs = [this.codec1, this.codec2, this.codec3]
-        allCodecs.forEach(codec => {
-          this.uploadVideo(codec)
-        })
+        this.uploadVideo(this.line)
       },
 
-      async uploadVideo(codec) {
+      async uploadVideo(command) {
         const formData = new FormData()
         formData.append('video', this.video)
         try {
-          const response = await axios.post('http://localhost:3000/upload', formData, {
+          const response = await axios.post('http://localhost:3000/command', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
-              'codec': codec
+              'command': command
             }
           })
           console.log(response.data)
@@ -55,6 +53,11 @@
           console.error("ERROR: ", error)
         }
       },
+    },
+    watch: {
+      video: function() {
+        this.inputVideo = this.video.name
+      }
     }
   }
 </script>
@@ -65,6 +68,7 @@
     margin: 40px;
     font-size: 1.5rem;
     text-align: center;
+    font-weight: bold;
   }
 
   .command__form {
