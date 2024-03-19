@@ -35,8 +35,6 @@
     name: 'HomeView',
     data() {
       return {
-        ffmpeg: null,
-        ffmpegLoaded: false,
         video: null,
         codec1: 'libx264',
         codec2: 'libx265',
@@ -69,22 +67,23 @@
       async runTests(e) {
         e.preventDefault()
         const allCodecs = [this.codec1, this.codec2, this.codec3]
-        // allCodecs.forEach(codec => {
-        //   this.uploadVideo(codec)
-        // })
+        allCodecs.forEach(codec => {
+          this.uploadVideo(codec)
+        })
       },
 
       /**
        * Uploads the selected video to the Express server.
        * @returns {Promise<void>} - A promise that resolves when the video is uploaded.
        */
-      async uploadVideo() {
+      async uploadVideo(codec) {
         const formData = new FormData()
         formData.append('video', this.video)
         try {
           const response = await axios.post('http://localhost:3000/upload', formData, {
             headers: {
-              'Content-Type': 'multipart/form-data'
+              'Content-Type': 'multipart/form-data',
+              'codec': codec
             }
           })
           console.log(response.data)
