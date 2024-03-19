@@ -26,7 +26,7 @@ const upload = multer({ storage: storage });
  * @param {import('express').Request} req - The request object.
  * @param {import('express').Response} res - The response object.
  */
-app.post('/upload', upload.single('video'), (req, res) => {
+app.post('/codecs', upload.single('video'), (req, res) => {
   console.log('Received video:', req.file);
 
   const codec = req.headers.codec;
@@ -37,6 +37,30 @@ app.post('/upload', upload.single('video'), (req, res) => {
   console.log(`Path: ${req.file.path}`)
   console.log(`Codec: ${codec}`)
   console.log(`FFmpeg command: ${ffmpegCommand}`)
+
+  exec(ffmpegCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.error('Error:', error);
+      return;
+    }
+    console.log('stdout:', stdout);
+    console.error('stderr:', stderr);
+  });
+
+  const response = {
+    message: 'Video processed successfully!',
+    filename: req.file.filename,
+    // SSIM, PSNR y VMAF
+  };
+  res.status(200).send(response);
+});
+
+app.post('/command', upload.single('video'), (req, res) => {
+  console.log('Received video:', req.file);
+
+  const command = req.headers.command;
+
+  const ffmpegCommand = `ffmpeg -i ${req.file.path} ${command}`;
 
   exec(ffmpegCommand, (error, stdout, stderr) => {
     if (error) {
