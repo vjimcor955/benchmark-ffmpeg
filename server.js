@@ -1,42 +1,52 @@
 import express from 'express';
 import cors from 'cors';
 import { exec } from 'child_process';
+import multer from 'multer';
 
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 3000;
 
-// Route to handle video conversion
-app.get('/:video/:codec', (req, res) => {
-  // Declare input video file
-  // const inputVideo = 'city.mp4';
-  const inputVideo = req.query.video;
-  // Declare requested codec
-  const codec = req.params.codec;
+/**
+ * Multer disk storage configuration.
+ * @type {import('multer').StorageEngine}
+ */
+const storage = multer.diskStorage({
+  destination: 'uploads/',
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+const upload = multer({ storage: storage });
 
-  // Execute FFmpeg command to convert video
-  exec(`ffmpeg -i ${inputVideo} -c:v ${codec} output_${codec}.mp4`, (error, stdout, stderr) => {
-    // Handle error
-    if (error) {
-        console.error(`Error: ${error.message}`);
-        res.status(500).json({ error: 'Video conversion failed' });
-        return;
-    }
-    if (stderr) {
-        console.error(`FFmpeg error: ${stderr}`);
-        res.status(500).json({ error: 'Video conversion failed' });
-        return;
-    }
-    // Success message
-    console.log(`Video converted successfully to ${codec} format`);
-    res.status(200).json({ message: `Video converted successfully to ${codec} format`});
-  });
+/**
+ * Handles the POST request for uploading a video.
+ * @param {import('express').Request} req - The request object.
+ * @param {import('express').Response} res - The response object.
+ */
+app.post('/upload', upload.single('video'), (req, res) => {
+  console.log('Received video:', req.file);
+  const response = {
+    message: 'Video uploaded successfully!',
+    filename: req.file.filename,
+  };
+  res.status(200).send(response);
 });
 
+/**
+ * Handles the GET request for the root endpoint.
+ * @param {import('express').Request} req - The request object.
+ * @param {import('express').Response} res - The response object.
+ */
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  console.log('Server up!')
+  res.send('Server up!');
 });
 
+/**
+ * Shows the port where the server is running.
+ * @param {number} PORT - The port number.
+ */
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
