@@ -14,7 +14,9 @@ const PORT = process.env.PORT || 3000;
 const storage = multer.diskStorage({
   destination: 'uploads/',
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    const codec = req.headers.codec;
+    const outputName = `${file.originalname.split('.')[0]}_${codec}.${file.originalname.split('.')[1]}`;
+    cb(null, outputName);
   }
 });
 const upload = multer({ storage: storage });
@@ -26,9 +28,29 @@ const upload = multer({ storage: storage });
  */
 app.post('/upload', upload.single('video'), (req, res) => {
   console.log('Received video:', req.file);
+
+  const codec = req.headers.codec;
+
+  // FFmpeg command to convert the video.
+  const ffmpegCommand = `ffmpeg -i ${req.file.path} -c:v ${codec} results/${req.file.filename}`;
+
+  console.log(`Path: ${req.file.path}`)
+  console.log(`Codec: ${codec}`)
+  console.log(`FFmpeg command: ${ffmpegCommand}`)
+
+  exec(ffmpegCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.error('Error:', error);
+      return;
+    }
+    console.log('stdout:', stdout);
+    console.error('stderr:', stderr);
+  });
+
   const response = {
-    message: 'Video uploaded successfully!',
+    message: 'Video processed successfully!',
     filename: req.file.filename,
+    // SSIM, PSNR y VMAF
   };
   res.status(200).send(response);
 });
