@@ -4,11 +4,9 @@
       <label for="video">Select a video:</label>
       <input type="file" id="video" accept="video/*" @change="handleFileChange">
     </div>
-
     <CodecsForm :video="video" v-if="codecs"/>
     <CommandForm :video="video" v-if="!codecs"/>
     <a @click="codecs = !codecs" class="form_selector">{{ !codecs ? 'Codecs selector' : 'FFmpeg command' }}</a>
-
     <div class="test_buttons">
       <input type="submit" value="Server connection" @click="serverTest">
     </div>
@@ -17,7 +15,6 @@
 
 
 <script>
-  import axios from 'axios';
   import CodecsForm from '../components/CodecsForm.vue';
   import CommandForm from '../components/CommandForm.vue';
   
@@ -34,13 +31,12 @@
       CommandForm
     },
     methods: {
+      /**
+       * Handles the change event when a file is selected.
+       * @param {Event} e - The change event object.
+       */
       handleFileChange(e) {
         this.video = e.target.files[0]
-      },
-
-      async serverTest() {
-        const response = await axios.get('http://localhost:3000/')
-        console.log(response.data)
       },
     }
   }
@@ -81,7 +77,6 @@
       font-size: 1.1em;
       cursor: pointer;
       text-decoration: underline;
-      font-weight: bold;
       padding: 10px;
       border-radius: 5px;
     }
