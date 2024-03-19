@@ -14,7 +14,7 @@
         <label for="codec3">Write a video a codec:</label>
         <input v-model="codec3" type="text" id="codec3">
       </div>
-      <input type="submit" value="Run codecs tests" @click="runTests">
+      <input type="submit" value="Run codecs tests" @click="runCodecsTests">
     </form>
   </div>
 </template>
@@ -32,7 +32,6 @@
         codec3: 'libvpx-vp9',
       }
     },
-    // recieves video prompt from HomeView
     props: {
       video: {
         type: Object,
@@ -40,7 +39,7 @@
       }
     },
     methods: {
-      async runTests(e) {
+      async runCodecsTests(e) {
         e.preventDefault()
         const allCodecs = [this.codec1, this.codec2, this.codec3]
         allCodecs.forEach(codec => {
@@ -52,7 +51,7 @@
         const formData = new FormData()
         formData.append('video', this.video)
         try {
-          const response = await axios.post('http://localhost:3000/upload', formData, {
+          const response = await axios.post('http://localhost:3000/codecs', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
               'codec': codec
@@ -73,6 +72,7 @@
     margin: 40px;
     font-size: 1.2rem;
     text-align: center;
+    font-weight: bold;
   }
 
   .codecs__form {
