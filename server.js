@@ -47,12 +47,25 @@ app.post('/codecs', upload.single('video'), (req, res) => {
     console.error('stderr:', stderr);
   });
 
-  const response = {
-    message: 'Video processed successfully!',
-    filename: req.file.filename,
-    // SSIM, PSNR y VMAF
-  };
-  res.status(200).send(response);
+  const qualityMetricsCommand = `ffmpeg-quality-metrics results/${req.file.filename} ${req.file.path} \
+  -m psnr ssim vmaf`
+
+  exec(qualityMetricsCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.error('Error:', error);
+      return;
+    }
+    console.log('stdout:', stdout);
+    console.error('stderr:', stderr);
+
+    const response = {
+      message: 'Video processed successfully!',
+      filename: req.file.filename,
+      // SSIM, PSNR y VMAF
+      quality_metrics: JSON.parse(stdout),
+    };    
+    res.status(200).send(response);
+  });
 });
 
 app.post('/command', upload.single('video'), (req, res) => {
@@ -71,12 +84,25 @@ app.post('/command', upload.single('video'), (req, res) => {
     console.error('stderr:', stderr);
   });
 
-  const response = {
-    message: 'Video processed successfully!',
-    filename: req.file.filename,
-    // SSIM, PSNR y VMAF
-  };
-  res.status(200).send(response);
+  const qualityMetricsCommand = `ffmpeg-quality-metrics results/${req.file.filename} ${req.file.path} \
+  -m psnr ssim vmaf`
+
+  exec(qualityMetricsCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.error('Error:', error);
+      return;
+    }
+    console.log('stdout:', stdout);
+    console.error('stderr:', stderr);
+
+    const response = {
+      message: 'Video processed successfully!',
+      filename: req.file.filename,
+      // SSIM, PSNR y VMAF
+      quality_metrics: JSON.parse(stdout),
+    };    
+    res.status(200).send(response);
+  });
 });
 
 /**
