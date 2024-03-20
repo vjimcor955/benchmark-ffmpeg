@@ -4,9 +4,14 @@
       <label for="video">Select a video:</label>
       <input type="file" id="video" accept="video/*" @change="handleFileChange">
     </div>
-    <CodecsForm :video="video" v-if="codecs"/>
-    <CommandForm :video="video" v-if="!codecs"/>
-    <a @click="codecs = !codecs" class="form_selector">{{ !codecs ? 'Codecs selector' : 'FFmpeg command' }}</a>
+    <div class="form_navbar">
+      <a @click="formSelector" class="form_selector--codecs selected">Codecs selector</a>
+      <a @click="formSelector" class="form_selector--command">FFmpeg command</a>
+    </div>
+    <div class="selected_form">
+      <CodecsForm :video="video" v-if="codecs"/>
+      <CommandForm :video="video" v-if="!codecs"/>
+    </div>
     <div class="test_buttons">
       <input type="submit" value="Server connection" @click="serverTest">
     </div>
@@ -38,6 +43,20 @@
       handleFileChange(e) {
         this.video = e.target.files[0]
       },
+      /**
+       * Toggles the visibility of the forms and updates the navbar buttons.
+       * 
+       * @param {Event} e - The event object triggered by the form selector.
+       */
+      formSelector(e) {
+        this.codecs = !this.codecs;
+        for (let i = 0; i < e.target.parentNode.children.length; i++) {
+          e.target.parentNode.children[i].classList.remove('selected');
+        }
+        e.target.classList.add('selected');
+        // disable button if selected
+        e.target.disabled = true;
+      },
     }
   }
 </script>
@@ -50,14 +69,14 @@
     justify-content: flex-start;
     align-items: center;
     height: calc(100vh - 80px);
-    gap: 25px;
+    gap: 40px;
 
     .video_field {
-      width: 425px;
+      width: 450px;
       display: flex;
       flex-direction: column;
       gap: 20px;
-      margin-top: 20px;
+      margin-top: 50px;
 
       label {
         width: 100%;
@@ -68,20 +87,32 @@
       input[type="file"] {
         width: 100%;
         font-size: 1.1em;
-        padding: 10px;
         cursor: pointer;
       }
     }
 
-    .form_selector {
-      font-size: 1.1em;
-      cursor: pointer;
-      text-decoration: underline;
-      padding: 10px;
-      border-radius: 5px;
+    .form_navbar {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+
+      a {
+        font-size: 1.1em;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 5px;
+        border: #000 1px solid;
+      }
+      a:hover {
+        background-color: #f0f0f0;
+      }
+      a.selected {
+        text-decoration: underline;
+      }
     }
-    .form_selector:hover {
-      background-color: #f0f0f0;
+
+    .selected_form {
+      box-shadow: 0px 187px 75px rgba(0, 0, 0, 0.01), 0px 105px 63px rgba(0, 0, 0, 0.05), 0px 47px 47px rgba(0, 0, 0, 0.09), 0px 12px 26px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
     }
         
     .test_buttons {
