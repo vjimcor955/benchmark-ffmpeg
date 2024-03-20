@@ -1,29 +1,26 @@
 <template>
   <div class="command">
-    <h1>FFmpeg commands</h1>
     <form class="command__form">
-      <div class="command__form--field">
-        <label for="line">Write the ffmpeg commands:</label>
-        <div class="command__form--field--input">
-          <p>ffmpeg -i {{ inputVideo }}</p>
+      <h1>FFmpeg commands</h1>
+      <p>Write the ffmpeg commands:</p>
+      <div class="command__form--fields">
+        <div class="command__form--fields--input">
+          <label for="command1">ffmpeg -i {{ inputVideo }}</label>
           <input v-model="command1" type="text" id="line">
         </div>
-
-        <div v-if="showCommand2" class="command__form--field--input">
-          <p>ffmpeg -i {{ inputVideo }}</p>
+        <div v-if="showCommand2" class="command__form--fields--input">
+          <label for="command2">ffmpeg -i {{ inputVideo }}</label>
           <input v-model="command2" type="text" id="line">
-          <a @click="showCommand2 = !showCommand2">X</a>
-        </div>
-        <a v-if="!showCommand2" @click="showCommand2 = !showCommand2" class="add_command">Add Command</a>
-
-        <div v-if="showCommand3" class="command__form--field--input">
-          <p>ffmpeg -i {{ inputVideo }}</p>
+          <a @click="showCommand2 = !showCommand2" class="delete_field">X</a>
+        </div>       
+        <div v-if="showCommand3" class="command__form--fields--input">
+          <label for="command3">ffmpeg -i {{ inputVideo }}</label>
           <input v-model="command3" type="text" id="line">
-          <a @click="showCommand3 = !showCommand3">X</a>
-        </div>
-        <a v-if="showCommand2 && !showCommand3" @click="showCommand3 = !showCommand3" class="add_command">Add Command</a>
-
+          <a @click="showCommand3 = !showCommand3" class="delete_field">X</a>
+        </div>    
       </div>
+      <a v-if="!showCommand2" @click="showCommand2 = !showCommand2" class="add_command">Add Command</a>
+      <a v-if="showCommand2 && !showCommand3" @click="showCommand3 = !showCommand3" class="add_command">Add Command</a>
       <input type="submit" value="Run command test" @click="runCommandTest">
     </form>
   </div>
@@ -64,7 +61,6 @@
           this.commandTest(command)
         })
       },
-
       /**
        * Executes the test by sending a video file and a command to the server.
        * @param {string} command - The command to be executed on the server.
@@ -96,60 +92,63 @@
 
 
 <style lang="scss">
-  h1 {
-    margin: 40px;
-    font-size: 1.5rem;
-    text-align: center;
-    font-weight: bold;
-  }
-
   .command__form {
     display: flex;
-    width: 500px;
+    width: 50vw;
+    padding: 50px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 80vw;
     gap: 40px;
 
-    &--field {
+    h1 {
+      font-size: 1.5rem;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    &--fields {
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 25px;
-      align-items: center;
-
-      label {
-        font-size: 1.1em;
-        margin-bottom: 10px;
-      }
+      align-items: flex-start;
+      gap: 20px;
 
       &--input {
-        width: 75%;
+        width: 100%;
         display: flex;
         gap: 15px;
         align-items: center;
-        justify-content: center;
 
         input[type="text"] {
-          width: 85%;
-          font-size: 1.1em;
+          width: 80%;
+          font-size: 1.05em;
           padding: 10px;
           border: 1px solid #000;
           border-radius: 5px;
         }
-      }
 
-      .add_command {
-        width: fit-content;
-        cursor: pointer;
-        text-decoration: underline;
-        padding: 10px;
-        border-radius: 5px;
+        .delete_field {
+          cursor: pointer;
+          padding: 10px;
+          border-radius: 50%;
+        }
+        .delete_field:hover {
+          background-color: #f0f0f0;
+        }
       }
-      .add_command:hover {
-        background-color: #f0f0f0;
-      }
+    }
+      
+    .add_command {
+      width: fit-content;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 10px;
+      border-radius: 5px;
+
+    }
+    .add_command:hover {
+      background-color: #f0f0f0;
     }
 
     input[type="submit"] {
