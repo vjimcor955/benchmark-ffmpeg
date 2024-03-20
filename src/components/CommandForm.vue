@@ -58,7 +58,9 @@
         e.preventDefault()
         const allCommand = [this.command1, this.command2, this.command3]
         allCommand.forEach(command => {
-          this.commandTest(command)
+          if (command != '') {
+            this.commandTest(command)
+          }
         })
       },
       /**
