@@ -57,7 +57,9 @@
         e.preventDefault()
         const allCodecs = [this.codec1, this.codec2, this.codec3]
         allCodecs.forEach(codec => {
-          this.codecTest(codec)
+          if (codec != '') {
+            this.codecTest(codec)
+          } 
         })
       },
       /**
