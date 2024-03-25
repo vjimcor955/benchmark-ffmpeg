@@ -5,15 +5,12 @@
       <input type="file" id="video" accept="video/*" @change="handleFileChange">
     </div>
     <div class="form_navbar">
-      <a @click="formSelector" class="form_selector--codecs selected">Codecs selector</a>
-      <a @click="formSelector" class="form_selector--command">FFmpeg command</a>
+      <a @click="formSelector" class="form_selector--codecs selected" :disabled="true">Codecs selector</a>
+      <a @click="formSelector" class="form_selector--command" :disabled="true">FFmpeg command</a>
     </div>
     <div class="selected_form">
       <CodecsForm :video="video" v-if="codecs"/>
       <CommandForm :video="video" v-if="!codecs"/>
-    </div>
-    <div class="test_buttons">
-      <input type="submit" value="Server connection" @click="serverTest">
     </div>
   </div>
 </template>
@@ -49,13 +46,15 @@
        * @param {Event} e - The event object triggered by the form selector.
        */
       formSelector(e) {
+        // Link is disabled after being clicked
+        if (e.target.classList.contains('selected')) {
+          return;
+        }
         this.codecs = !this.codecs;
         for (let i = 0; i < e.target.parentNode.children.length; i++) {
           e.target.parentNode.children[i].classList.remove('selected');
         }
         e.target.classList.add('selected');
-        // disable button if selected
-        e.target.disabled = true;
       },
     }
   }
