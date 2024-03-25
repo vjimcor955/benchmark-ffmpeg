@@ -61,6 +61,7 @@ app.post('/codecs', upload.single('video'), (req, res) => {
     const response = {
       message: 'Video processed successfully!',
       filename: req.file.filename,
+      codec: codec,
       // SSIM, PSNR y VMAF
       quality_metrics: JSON.parse(stdout),
     };    
@@ -98,6 +99,7 @@ app.post('/command', upload.single('video'), (req, res) => {
     const response = {
       message: 'Video processed successfully!',
       filename: req.file.filename,
+      codec: codec,
       // SSIM, PSNR y VMAF
       quality_metrics: JSON.parse(stdout),
     };    
