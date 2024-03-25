@@ -34,7 +34,7 @@
               <p class="data__codec--info__size--size">undefined</p>
             </div>
           </div>
-          <div class="charts" v-for="(result, index) in results">
+          <div class="charts">
             {{ parseChartData(result.quality_metrics) }}
             <GChart
               type="LineChart"
