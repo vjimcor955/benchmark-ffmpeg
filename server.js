@@ -43,6 +43,15 @@ app.post('/codecs', upload.single('video'), (req, res) => {
       console.error('Error:', error);
       return;
     }
+
+    // timer per second
+    const timer = setInterval(() => {
+      res.status(200).send(stdout);
+      console.error('stdout:', stdout);
+    }, 1000);
+
+    
+
     console.log('stdout:', stdout);
     console.error('stderr:', stderr);
   });
@@ -50,22 +59,33 @@ app.post('/codecs', upload.single('video'), (req, res) => {
   const qualityMetricsCommand = `ffmpeg-quality-metrics results/${req.file.filename} ${req.file.path} \
   -m psnr ssim vmaf`
 
-  exec(qualityMetricsCommand, (error, stdout, stderr) => {
-    if (error) {
-      console.error('Error:', error);
+  exec(qualityMetricsCommand, (qmError, qmStdout, qmStderr) => {
+    if (qmError) {
+      console.error('Error:', qmError);
       return;
     }
-    console.log('stdout:', stdout);
-    console.error('stderr:', stderr);
+    console.log('stdout:', qmStdout);
+    console.error('stderr:', qmStderr);
 
-    const response = {
-      message: 'Video processed successfully!',
-      filename: req.file.filename,
-      codec: codec,
-      // SSIM, PSNR y VMAF
-      quality_metrics: JSON.parse(stdout),
-    };    
-    res.status(200).send(response);
+    exec(`stat -c "%s" results/${req.file.filename}`, (fsError, fsStdout, fsStderr) => {
+      if (fsError) {
+        console.error('Error:', fsError);
+        return;
+      }
+      console.log('stdout:', fsStdout);
+      const fileSize = (parseInt(fsStdout) * 0.000001).toFixed(2);
+      console.error('stderr:', fsStderr);
+      
+      const response = {
+        message: 'Video processed successfully!',
+        filename: req.file.filename,
+        codec: codec,
+        size: fileSize,
+        // SSIM, PSNR y VMAF
+        quality_metrics: JSON.parse(qmStdout),
+      };    
+      res.status(200).send(response);
+    });
   });
 });
 
@@ -88,22 +108,33 @@ app.post('/command', upload.single('video'), (req, res) => {
   const qualityMetricsCommand = `ffmpeg-quality-metrics results/${req.file.filename} ${req.file.path} \
   -m psnr ssim vmaf`
 
-  exec(qualityMetricsCommand, (error, stdout, stderr) => {
-    if (error) {
-      console.error('Error:', error);
+  exec(qualityMetricsCommand, (qmError, qmStdout, qmStderr) => {
+    if (qmError) {
+      console.error('Error:', qmError);
       return;
     }
-    console.log('stdout:', stdout);
-    console.error('stderr:', stderr);
+    console.log('stdout:', qmStdout);
+    console.error('stderr:', qmStderr);
 
-    const response = {
-      message: 'Video processed successfully!',
-      filename: req.file.filename,
-      codec: codec,
-      // SSIM, PSNR y VMAF
-      quality_metrics: JSON.parse(stdout),
-    };    
-    res.status(200).send(response);
+    exec(`stat -c "%s" results/${req.file.filename}`, (fsError, fsStdout, fsStderr) => {
+      if (fsError) {
+        console.error('Error:', fsError);
+        return;
+      }
+      console.log('stdout:', fsStdout);
+      const fileSize = (parseInt(fsStdout) * 0.000001).toFixed(2);
+      console.error('stderr:', fsStderr);
+      
+      const response = {
+        message: 'Video processed successfully!',
+        filename: req.file.filename,
+        codec: codec,
+        size: fileSize,
+        // SSIM, PSNR y VMAF
+        quality_metrics: JSON.parse(qmStdout),
+      };    
+      res.status(200).send(response);
+    });
   });
 });
 
