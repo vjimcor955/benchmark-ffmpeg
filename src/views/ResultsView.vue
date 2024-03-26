@@ -1,10 +1,16 @@
 <template>
   <div class="results">
-    <h1>RESULTS</h1>
+    <!-- navbar to choose codec -->
+    <div class="results__navbar">
+      <a @click="codecSelector" class="results__navbar--codec selected">Codec 1</a>
+      <a v-if="codecs >= 2" @click="codecSelector" class="results__navbar--codec">Codec 2</a>
+      <a v-if="codecs == 3" @click="codecSelector" class="results__navbar--codec">Codec 3</a>
+    </div>
+    <!-- Table with general info about a codec process -->
     <div class="data">
-      <div class="data__codec" v-for="(result) in results">
-        {{ parseDataTable(result.quality_metrics.global) }}
-        <p class="data__codec--title">{{ result.codec }}</p>
+      <div class="data__codec">
+        {{ parseDataTable(results[codecSelected].quality_metrics.global) }}
+        <p class="data__codec--title">{{ results[codecSelected].codec }}</p>
         <div class="data__codec--info">
           <div class="data__codec--info__table">
             <table>
@@ -31,27 +37,36 @@
             </table>
             <div class="data__codec--info__size">
               <p class="data__codec--info__size--title">File size:</p>
-              <p class="data__codec--info__size--size">{{ result.size }} MB</p>
+              <p class="data__codec--info__size--size">{{ results[codecSelected].size }} MB</p>
             </div>
           </div>
-          <div class="charts">
-            {{ parseChartData(result.quality_metrics) }}
-            <GChart
-              type="LineChart"
-              :data="psnrData"
-              :options="chartOptions"
-            />
-            <GChart
-              type="LineChart"
-              :data="ssimData"
-              :options="chartOptions"
-            />
-            <GChart
-              type="LineChart"
-              :data="vmafData"
-              :options="chartOptions"
-            />
-          </div>
+        </div>
+      </div>
+      <!-- Charts with all the codecs quality metrics -->
+      <div class="data__charts">
+        <div v-if="dataLoaded" class="data__charts--chart">
+          <p class="data__charts--chart__title">PNSR - Higher values imply better quality</p>
+          <GChart
+            type="LineChart"
+            :data="psnrData"
+            :options="chartOptions"
+          />
+        </div>
+        <div v-if="dataLoaded" class="data__charts--chart">
+          <p class="data__charts--chart__title">SSIM - Higher values indicate better structural similarity between images</p>
+          <GChart
+            type="LineChart"
+            :data="ssimData"
+            :options="chartOptions"
+          />
+        </div>
+        <div v-if="dataLoaded" class="data__charts--chart">
+          <p class="data__charts--chart__title">VMAF - Higher scores suggest better overall perceived quality</p>
+          <GChart
+            type="LineChart"
+            :data="vmafData"
+            :options="chartOptions"
+          />
         </div>
       </div>
     </div>
@@ -70,7 +85,7 @@
         results: useVideoStore().getResults(),
         tableData: [],
         psnrData: [],
-        ssimData: [],
+        ssimData: [], 
         vmafData: [],
         chartOptions: {
           chart: {
@@ -78,10 +93,18 @@
             subtitle: 'Metrics',
           }
         },
+        dataLoaded: false,
+        codecs: 0,
+        codecSelected: 0,
       }
     },
     components: {
       GChart
+    },
+    created() {
+      this.displayNavBar()
+      this.parseChartData()
+      console.log("RESULTS", this.results)
     },
     methods: {
       /**
@@ -90,7 +113,7 @@
        */
       parseDataTable(codecData) {
         this.tableData = []
-        
+
         const psnr = codecData.psnr.mse_avg
         const ssim = codecData.ssim.ssim_avg
         const vmaf = codecData.vmaf.vmaf
@@ -103,31 +126,72 @@
        * Parses the data and pushes it into the charts.
        * @param {Object} codecData - Data to be parsed.
        */
-      parseChartData(codecData) {
-        this.psnrData = [
-          ['Frame', 'PSNR']
-        ]
-        this.ssimData = [
-          ['Frame', 'SSIM']
-        ]
-        this.vmafData =  [
-          ['Frame', 'VMAF']
-        ]
+      parseChartData() {       
+        const psnrHeader = ['Frame']
+        const ssimHeader = ['Frame']
+        const vmafHeader = ['Frame']
 
-        const psnr = codecData.psnr
-        const ssim = codecData.ssim
-        const vmaf = codecData.vmaf
+        this.results.forEach(codec => {
+          psnrHeader.push(codec.codec)
+          ssimHeader.push(codec.codec)
+          vmafHeader.push(codec.codec)
+        });
 
-        for (let i = 0; i < psnr.length; i += 10) {
-          this.psnrData.push([i, psnr[i].psnr_avg])
+        this.psnrData.push(psnrHeader)
+        this.ssimData.push(ssimHeader)
+        this.vmafData.push(vmafHeader)
+
+        const framesLength = this.results[0].quality_metrics.psnr.length
+        for (let i = 0; i < framesLength; i += 10) {
+          const psnrRow = [i]
+          const ssimRow = [i]
+          const vmafRow = [i]
+
+          this.results.forEach(codec => {
+            const psnr = codec.quality_metrics.psnr
+            const ssim = codec.quality_metrics.ssim
+            const vmaf = codec.quality_metrics.vmaf
+            psnrRow.push(psnr[i].psnr_avg)
+            ssimRow.push(ssim[i].ssim_avg)
+            vmafRow.push(vmaf[i].vmaf)
+          });
+
+          this.psnrData.push(psnrRow)
+          this.ssimData.push(ssimRow)
+          this.vmafData.push(vmafRow)
         }
-        for (let i = 0; i < ssim.length; i += 10) {
-          this.ssimData.push([i, ssim[i].ssim_avg])
+
+        this.dataLoaded = true
+      },
+      /**
+       * Displays the navigation bar buttons.
+       * Increments the 'codecs' count for each codec in the 'results' array.
+       */
+      displayNavBar() {
+        this.results.forEach(codec => {
+          this.codecs++
+        })
+      },
+
+      /**
+       * Handles the selection of a codec.
+       * @param {Event} e - The event object representing the click event.
+       */
+      codecSelector(e) {
+        // Link is disabled after being clicked
+        if (e.target.classList.contains('selected')) {
+          return;
         }
-        for (let i = 0; i < vmaf.length; i += 10) {
-          this.vmafData.push([i, vmaf[i].vmaf])
+        for (let i = 0; i < e.target.parentNode.children.length; i++) {
+          e.target.parentNode.children[i].classList.remove('selected');
         }
-      }
+        e.target.classList.add('selected');
+        for (let i = 0; i < e.target.parentNode.children.length; i++) {
+          if (e.target.parentNode.children[i].classList.contains('selected')) {
+            this.codecSelected = i
+          }
+        }
+      },
     },
   }
 </script>
@@ -135,17 +199,32 @@
 
 <style lang="scss">
   .results {
-    height: calc(100vh - 80px);
+    min-height: calc(100vh - 80px);
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 20px;
+    margin: 20px;
 
-    h1 {
-      margin-top: 20px;
-      font-size: 1.5rem;
-      text-align: center;
-      font-weight: bold;
+    &__navbar {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+
+      a {
+        font-size: 1.1em;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 5px;
+        border: #000 1px solid;
+      }
+      a:hover {
+        background-color: #f0f0f0;
+      }
+      a.selected {
+        text-decoration: underline;
+      }
     }
 
     .data {
@@ -155,18 +234,17 @@
       width: 80vw;
       height: fit-content;
       gap: 20px;
+      box-shadow: 0px 187px 75px rgba(0, 0, 0, 0.01), 0px 105px 63px rgba(0, 0, 0, 0.05), 0px 47px 47px rgba(0, 0, 0, 0.09), 0px 12px 26px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
 
       &__codec {
         width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 10px;
-        border: 1px solid #000;
 
         &--title {
           font-size: 1.5rem;
-          font-weight: bold;
+          font-weight: bolder;
           padding: 15px;
         }
 
@@ -220,9 +298,20 @@
               font-size: 1.5em;
             }
           }
+        }
+      }
 
-          .charts {
-            width: 100%;
+      &__charts {
+        width: 100%;
+        align-items: center;
+
+        &--chart {
+          width: 100%;
+          text-align: center;
+
+          &__title {
+            font-size: 1.1em;
+            font-weight: bold;
           }
         }
       }
