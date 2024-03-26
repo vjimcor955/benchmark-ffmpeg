@@ -92,6 +92,7 @@ app.post('/command', upload.single('video'), (req, res) => {
 
   const command = req.headers.command;
 
+  // Check possible code injection
   const ffmpegCommand = `ffmpeg -i ${req.file.path} ${command}`;
 
   exec(ffmpegCommand, (error, stdout, stderr) => {
