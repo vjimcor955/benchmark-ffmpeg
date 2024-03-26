@@ -22,7 +22,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 /**
- * Handles the POST request for uploading a video.
+ * Handles the POST request for the /codecs endpoint.
+ * Executes FFmpeg command to convert the video to the specified codec and returns the video converted along with its quality metrics.
+ * 
  * @param {import('express').Request} req - The request object.
  * @param {import('express').Response} res - The response object.
  */
@@ -87,6 +89,13 @@ app.post('/codecs', upload.single('video'), (req, res) => {
   });
 });
 
+/**
+ * Handles the POST request for the /command endpoint.
+ * Executes FFmpeg command to convert the video with the specified command and returns the video converted along with its quality metrics.
+ * 
+ * @param {import('express').Request} req - The request object.
+ * @param {import('express').Response} res - The response object.
+ */
 app.post('/command', upload.single('video'), (req, res) => {
   console.log('Received video:', req.file);
 
