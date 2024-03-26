@@ -30,8 +30,8 @@
               </tbody>
             </table>
             <div class="data__codec--info__size">
-              <p class="data__codec--info__size--title">File size: </p>
-              <p class="data__codec--info__size--size">undefined</p>
+              <p class="data__codec--info__size--title">File size:</p>
+              <p class="data__codec--info__size--size">{{ result.size }} MB</p>
             </div>
           </div>
           <div class="charts">
@@ -84,15 +84,25 @@
       GChart
     },
     methods: {
+      /**
+       * Parses the data and pushes it into the table.
+       * @param {Object} codecData - Data to be parsed.
+       */
       parseDataTable(codecData) {
         this.tableData = []
+        
         const psnr = codecData.psnr.mse_avg
         const ssim = codecData.ssim.ssim_avg
         const vmaf = codecData.vmaf.vmaf
+
         this.tableData.push(["PSNR", psnr.average, psnr.max, psnr.median, psnr.min, psnr.stdev])
         this.tableData.push(["SSIM", ssim.average, ssim.max, ssim.median, ssim.min, ssim.stdev])
         this.tableData.push(["VMAF", vmaf.average, vmaf.max, vmaf.median, vmaf.min, vmaf.stdev])
       },
+      /**
+       * Parses the data and pushes it into the charts.
+       * @param {Object} codecData - Data to be parsed.
+       */
       parseChartData(codecData) {
         this.psnrData = [
           ['Frame', 'PSNR']
@@ -144,7 +154,6 @@
       align-items: center;
       width: 80vw;
       height: fit-content;
-      // border: 1px solid #000;
       gap: 20px;
 
       &__codec {
@@ -154,7 +163,6 @@
         align-items: center;
         gap: 10px;
         border: 1px solid #000;
-
 
         &--title {
           font-size: 1.5rem;
@@ -167,7 +175,6 @@
           display: flex;
           flex-direction: column;
           align-items: center;
-          
 
           &__table {
             width: 80%;
