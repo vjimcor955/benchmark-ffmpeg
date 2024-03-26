@@ -44,13 +44,11 @@ app.post('/codecs', upload.single('video'), (req, res) => {
       return;
     }
 
-    // timer per second
-    const timer = setInterval(() => {
-      res.status(200).send(stdout);
-      console.error('stdout:', stdout);
-    }, 1000);
-
-    
+    // response per second
+    // const timer = setInterval(() => {
+    //   res.status(200).send(stdout);
+    //   console.error('stdout:', stdout);
+    // }, 1000);
 
     console.log('stdout:', stdout);
     console.error('stderr:', stderr);
