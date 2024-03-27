@@ -25,7 +25,7 @@
     data() {
       return {
         codecs: true,
-        video: {},
+        video: null, //
       }
     },
     components: {

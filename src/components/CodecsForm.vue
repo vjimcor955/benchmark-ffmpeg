@@ -21,7 +21,7 @@
       </div>
       <a v-if="!showCodec2" @click="showCodec2 = !showCodec2" class="add_codec">Add Codec</a>
       <a v-if="showCodec2 && !showCodec3" @click="showCodec3 = !showCodec3" class="add_codec">Add Codec</a>
-      <input type="submit" value="Run codecs tests" @click="runCodecsTests" :disabled="loading">
+      <input type="submit" value="Run codecs tests" @click="runCodecsTests" :disabled="buttonDisabled">
     </form>
     <div v-if="loading" class="loading">
       <div class="loader">
@@ -52,6 +52,7 @@
         codec3: '',
         showCodec2: false,
         showCodec3: false,
+        buttonDisabled: true,
         loading: false,
         stopwatchInterval: null,
         stopwatchTime: '00:00:00',
@@ -62,9 +63,17 @@
     },
     props: {
       video: {
-        type: Object,
+        type: null,
         required: true
       }
+    },
+    watch: {
+      codec1() {
+        this.handleButton();
+      },
+      video() {
+        this.handleButton();
+      },
     },
     methods: {
       /**
@@ -74,6 +83,7 @@
        */
       async runCodecsTests(e) {
         e.preventDefault()
+        this.buttonDisabled = true
         this.loading = true
 
         // stopwatch since button is pressed
@@ -123,6 +133,13 @@
           return response.data
         } catch (error) {
           console.error("ERROR: ", error)
+        }
+      },
+      handleButton() {
+        if (this.codec1 != '' && this.video != null) {
+          this.buttonDisabled = false
+        } else {
+          this.buttonDisabled = true
         }
       }
     }
