@@ -2,8 +2,8 @@
   <header>
     <h3>FFmpeg Benchmark</h3>
     <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <!-- <RouterLink to="/about">Results</RouterLink> -->
+      <RouterLink :to="{name: 'home'}">Home</RouterLink>
+      <!-- <RouterLink :to="{name: 'results'}">Results</RouterLink> -->
     </nav>
   </header>
 </template>
