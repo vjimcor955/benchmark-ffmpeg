@@ -96,38 +96,7 @@
           this.stopwatchTime = `${hours}:${minutes}:${seconds}`;
         }, 1000);
 
-        // TODO: FIX LOOP
-
-        // const allCodecs = [this.codec1, this.codec2, this.codec3]
-
-        // allCodecs.forEach(codec => {
-        //   console.log("FORM", codec)
-        //   if (codec != '') {
-        //     const videoInfo = this.codecTest(codec)
-        //     // Wait for the response the assing it to the pinia store
-        //     videoInfo.then((response) => {
-        //       // Assign data to PiniaStore
-        //       console.log(`Setting results for ${codec}`)
-        //       useVideoStore().setResults(response)
-
-        //       clearInterval(this.stopwatchInterval)
-        //       this.stopwatchTime = 'Loading results...'
-
-        //       setTimeout(() => {
-        //         // reset stopwatch and loading
-        //         this.loading = false
-
-        //         // Redirect to results page
-        //         this.$router.push({ name: 'results' })
-        //       }, 2000)
-        //     })
-        //   } 
-        // })
-
-
-
         const allCodecs = [this.codec1, this.codec2, this.codec3]
-
         const promises = allCodecs.map(codec => {
           if (codec != '') {
             return this.codecTest(codec).then((response) => {
@@ -151,7 +120,6 @@
             this.$router.push({ name: 'results' })
           }, 2000)
         })
-
       },
       /**
        * Sends a POST request to test a codec with the provided video file.
