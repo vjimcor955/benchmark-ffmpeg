@@ -19,7 +19,7 @@
       </div>
       <!-- Charts with all the codecs quality metrics -->
       <div class="data_codec__charts">
-        <MetricsCharts :codecData="results[codecSelected]" class=""/>
+        <MetricsCharts :codecData="results" class=""/>
       </div>
     </div>
   </div>
@@ -46,7 +46,6 @@ export default {
   },
   created() {
     this.displayNavBar()
-    console.log("STORE", this.results)
   },
   methods: {
     /**
@@ -58,7 +57,6 @@ export default {
         this.codecs++
       })
     },
-    
     /**
     * Handles the selection of a codec.
     * @param {Event} e - The event object representing the click event.
