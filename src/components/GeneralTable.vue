@@ -43,6 +43,11 @@
     created() {
       this.parseDataTable(this.codecData)
     },
+    watch: {
+      codecData() {
+        this.parseDataTable(this.codecData)
+      }
+    },
     methods: {
       /**
        * Parses the data and pushes it into the table.

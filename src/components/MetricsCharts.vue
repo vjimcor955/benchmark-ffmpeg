@@ -1,8 +1,8 @@
 <template>
   <div class="data_charts">
-    <div class="data_charts__chart">
-      <p class="data_charts__chart--title">VMAF per frame - Higher scores suggest better overall perceived quality</p>
-      <GChart
+    <div class="data_charts__metric">
+      <p class="data_charts__metric--title">VMAF per frame - Higher scores suggest better overall perceived quality</p>
+      <GChart class="data_charts__metric--chart"
         type="LineChart"
         :data="vmafData"
         :options="chartOptions"
@@ -10,17 +10,17 @@
     </div>
     <a @click="showMoreCharts = !showMoreCharts" class="show_charts">{{ showMoreCharts ? "Hide charts" : "Show more charts" }}</a>
     <div v-if="showMoreCharts" class="more_charts">
-      <div class="data_charts__chart">
-        <p class="data_charts__chart--title">SSIM per frame - Higher values indicate better structural similarity between images</p>
-        <GChart
+      <div class="data_charts__metric">
+        <p class="data_charts__metric--title">SSIM per frame - Higher values indicate better structural similarity between images</p>
+        <GChart class="data_charts__metric--chart"
           type="LineChart"
           :data="ssimData"
           :options="chartOptions"
         />
       </div>
-      <div class="data_charts__chart">
-        <p class="data_charts__chart--title">PNSR per frame - Higher values imply better quality</p>
-        <GChart
+      <div class="data_charts__metric">
+        <p class="data_charts__metric--title">PNSR per frame - Higher values imply better quality</p>
+        <GChart class="data_charts__metric--chart"
           type="LineChart"
           :data="psnrData"
           :options="chartOptions"
@@ -62,14 +62,21 @@
     created() {
       this.parseChartData(this.codecData)
     },
+    watch: {
+      codecData() {
+        this.parseChartData(this.codecData)
+      }
+    },
     methods: {
       /**
        * Parses the data and pushes it into the charts.
        * @param {Object} codecData - Data to be parsed.
        */
-      parseChartData(data) {       
-        console.log("DATA", data)
-
+      parseChartData(data) {   
+        this.psnrData = []
+        this.ssimData = []
+        this.vmafData = []
+        
         const psnrHeader = ['Frame']
         const ssimHeader = ['Frame']
         const vmafHeader = ['Frame']
@@ -83,7 +90,6 @@
         this.vmafData.push(vmafHeader)
 
         const framesLength = data.quality_metrics.psnr.length
-        console.log("FRAMES", framesLength)
         for (let i = 0; i < framesLength; i += 10) {
           const psnrRow = [i]
           const ssimRow = [i]
@@ -116,13 +122,20 @@
     justify-content: center;
     gap: 60px;
 
-    &__chart {
+    &__metric {
       width: 100%;
-      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
 
       &--title {
         font-size: 1.1em;
         font-weight: bold;
+      }
+
+      &--chart {
+        width: 100%;
       }
     }
 
