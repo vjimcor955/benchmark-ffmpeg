@@ -36,7 +36,6 @@ export default {
   data() {
     return {
       results: useVideoStore().resultsList,
-      // codecData: useVideoStore().resultsList[0],
       codecs: 0,
       codecSelected: 0,
     }
