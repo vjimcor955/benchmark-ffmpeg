@@ -62,46 +62,41 @@
     created() {
       this.parseChartData(this.codecData)
     },
-    watch: {
-      codecData() {
-        this.parseChartData(this.codecData)
-      }
-    },
     methods: {
       /**
        * Parses the data and pushes it into the charts.
        * @param {Object} codecData - Data to be parsed.
        */
-      parseChartData(data) {   
-        this.psnrData = []
-        this.ssimData = []
-        this.vmafData = []
-        
+      parseChartData(data) {               
         const psnrHeader = ['Frame']
         const ssimHeader = ['Frame']
         const vmafHeader = ['Frame']
 
-        psnrHeader.push(data.codec)
-        ssimHeader.push(data.codec)
-        vmafHeader.push(data.codec)
+        data.forEach(codec => {
+          psnrHeader.push(codec.codec)
+          ssimHeader.push(codec.codec)
+          vmafHeader.push(codec.codec)          
+        });
 
         this.psnrData.push(psnrHeader)
         this.ssimData.push(ssimHeader)
         this.vmafData.push(vmafHeader)
 
-        const framesLength = data.quality_metrics.psnr.length
+        const framesLength = data[0].quality_metrics.psnr.length
         for (let i = 0; i < framesLength; i += 10) {
           const psnrRow = [i]
           const ssimRow = [i]
           const vmafRow = [i]
 
-          const psnr = data.quality_metrics.psnr
-          const ssim = data.quality_metrics.ssim
-          const vmaf = data.quality_metrics.vmaf
+          data.forEach(codec => {
+            const psnr = codec.quality_metrics.psnr
+            const ssim = codec.quality_metrics.ssim
+            const vmaf = codec.quality_metrics.vmaf
 
-          psnrRow.push(psnr[i].psnr_avg)
-          ssimRow.push(ssim[i].ssim_avg)
-          vmafRow.push(vmaf[i].vmaf)
+            psnrRow.push(psnr[i].psnr_avg)
+            ssimRow.push(ssim[i].ssim_avg)
+            vmafRow.push(vmaf[i].vmaf)
+          })
 
           this.psnrData.push(psnrRow)
           this.ssimData.push(ssimRow)
