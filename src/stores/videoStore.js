@@ -11,6 +11,9 @@ export const useVideoStore = defineStore('videoStore', {
     getResults() {
       return this.resultsList;
     },
+    resetResults() {
+      this.resultsList = [];
+    }
   },
 })
 
