@@ -5,8 +5,8 @@
       <input type="file" id="video" accept="video/*" @change="handleFileChange">
     </div>
     <div class="form_navbar">
-      <a @click="formSelector" class="form_selector--codecs selected" :disabled="true">Codecs selector</a>
-      <a @click="formSelector" class="form_selector--command" :disabled="true">FFmpeg command</a>
+      <a @click="formSelector" class="form_selector--codecs selected">Codecs selector</a>
+      <a @click="formSelector" class="form_selector--command">FFmpeg command</a>
     </div>
     <div class="selected_form">
       <CodecsForm :video="video" v-if="codecs"/>
