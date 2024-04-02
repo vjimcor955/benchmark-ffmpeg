@@ -60,9 +60,9 @@
         const ssim = data.quality_metrics.global.ssim.ssim_avg
         const vmaf = data.quality_metrics.global.vmaf.vmaf
 
-        this.tableRows.push(["PSNR", psnr.average, psnr.max, psnr.median, psnr.min, psnr.stdev])
-        this.tableRows.push(["SSIM", ssim.average, ssim.max, ssim.median, ssim.min, ssim.stdev])
         this.tableRows.push(["VMAF", vmaf.average, vmaf.max, vmaf.median, vmaf.min, vmaf.stdev])
+        this.tableRows.push(["SSIM", ssim.average, ssim.max, ssim.median, ssim.min, ssim.stdev])
+        this.tableRows.push(["PSNR", psnr.average, psnr.max, psnr.median, psnr.min, psnr.stdev])
       },
     }
   }
