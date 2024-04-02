@@ -40,6 +40,8 @@
 
 
 <script>
+  // TODO: borrar codecs si se quita el input
+
   import axios from 'axios'
   import { useVideoStore } from '../stores/videoStore.js'
 
@@ -59,7 +61,11 @@
       }
     },
     created() {
-      this.loading = false
+      this.loading = false,
+      useVideoStore().resetResults(),
+      this.codec1 = '',
+      this.codec2 = '',
+      this.codec3 = ''
     },
     props: {
       video: {
@@ -101,9 +107,7 @@
           if (codec != '') {
             return this.codecTest(codec).then((response) => {
               // Assign data to PiniaStore
-              console.log(`SETTING ${codec}`)
               useVideoStore().setResults(response)
-              console.log(`RESULTS ${codec}`, response)
             })
           } 
         })
@@ -178,8 +182,8 @@
         width: 550px;
         display: flex;
         flex-direction: column;
-        gap: 20px;
         align-items: flex-start;
+        gap: 20px;
         
         &--input {
           width: 100%;
@@ -319,9 +323,6 @@
           font-weight: bold;
         }
       }
-
     }
-
-
   }
 </style>
