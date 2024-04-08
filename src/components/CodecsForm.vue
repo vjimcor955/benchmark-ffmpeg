@@ -11,12 +11,12 @@
         <div v-if="showCodec2" class="codec__form--fields--input">
           <label for="codec2">Codec 2:</label>
           <input v-model="codec2" type="text" id="codec2">
-          <a @click="showCodec2 = !showCodec2" class="delete_field">X</a>
+          <a @click="deleteField" id="codec2" class="delete_field">X</a>
         </div>
         <div v-if="showCodec3" class="codec__form--fields--input">
           <label for="codec3">Codec 3:</label>
           <input v-model="codec3" type="text" id="codec3">
-          <a @click="showCodec3 = !showCodec3" class="delete_field">X</a>
+          <a @click="deleteField" id="codec3" class="delete_field">X</a>
         </div>
       </div>
       <a v-if="!showCodec2" @click="showCodec2 = !showCodec2" class="add_codec">Add Codec</a>
@@ -24,12 +24,7 @@
       <input type="submit" value="Run codecs tests" @click="runCodecsTests" :disabled="buttonDisabled">
     </form>
     <div v-if="loading" class="loading">
-      <div class="loader">
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
-      </div>
+      <Loader />
       <div class="loading__content">
         <p class="loading__content--message">Processing video...</p>
         <p class="loading__content--timer">{{ stopwatchTime }}</p>
@@ -40,10 +35,10 @@
 
 
 <script>
-  // TODO: borrar codecs si se quita el input
-
   import axios from 'axios'
   import { useVideoStore } from '../stores/videoStore.js'
+  import Loader from '../components/Loader.vue';
+
 
   export default {
     name: 'CodecsForm',
@@ -59,6 +54,9 @@
         stopwatchInterval: null,
         stopwatchTime: '00:00:00',
       }
+    },
+    components: {
+      Loader
     },
     created() {
       this.loading = false,
@@ -150,6 +148,15 @@
           this.buttonDisabled = false
         } else {
           this.buttonDisabled = true
+        }
+      },
+      deleteField(e) {
+        if (e.target.id === 'codec2') {
+          this.showCodec2 = false
+          this.codec2 = ''
+        } else if (e.target.id === 'codec3') {
+          this.showCodec3 = false
+          this.codec3 = ''
         }
       }
     }
