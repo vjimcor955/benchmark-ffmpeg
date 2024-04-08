@@ -1,17 +1,17 @@
 import express from 'express';
 import cors from 'cors';
-import { exec } from 'child_process';
 import multer from 'multer';
+import { exec } from 'child_process';
 
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 3000;
 
 /**
- * Multer disk storage configuration.
+ * Multer disk storage configuration for codec endpoint.
  * @type {import('multer').StorageEngine}
  */
-const storage = multer.diskStorage({
+const storageCodec = multer.diskStorage({
   destination: 'uploads/',
   filename: function (req, file, cb) {
     const codec = req.headers.codec;
@@ -19,7 +19,21 @@ const storage = multer.diskStorage({
     cb(null, outputName);
   }
 });
-const upload = multer({ storage: storage });
+const uploadCodec = multer({ storage: storageCodec });
+
+/**
+ * Multer disk storage configuration.
+ * @type {import('multer').StorageEngine}
+ */
+const storageCommand = multer.diskStorage({
+  destination: 'uploads/',
+  filename: function (req, file, cb) {
+    // const outputName = `${file.originalname.split('.')[0]}_${Date.now()}.${file.originalname.split('.')[1]}`;
+    const inputName = req.headers.input
+    cb(null, inputName);
+  }
+});
+const uploadCommand = multer({ storage: storageCommand });
 
 /**
  * Handles the POST request for the /codecs endpoint.
@@ -28,60 +42,44 @@ const upload = multer({ storage: storage });
  * @param {import('express').Request} req - The request object.
  * @param {import('express').Response} res - The response object.
  */
-app.post('/codecs', upload.single('video'), (req, res) => {
-  console.log('Received video:', req.file);
-
+app.post('/codecs', uploadCodec.single('video'), (req, res) => {
   const codec = req.headers.codec;
+  console.log(`---------- CODEC: ${codec}`)
 
-  // FFmpeg command to convert the video.
   const ffmpegCommand = `ffmpeg -i ${req.file.path} -c:v ${codec} results/${req.file.filename}`;
+  console.log(`FFMPEG: ${ffmpegCommand}`)
 
-  console.log(`Path: ${req.file.path}`)
-  console.log(`Codec: ${codec}`)
-  console.log(`FFmpeg command: ${ffmpegCommand}`)
-
-  exec(ffmpegCommand, (error, stdout, stderr) => {
-    if (error) {
-      console.error('Error:', error);
+  exec(ffmpegCommand, (fferror, ffstdout, ffstderr) => {
+    if (fferror) {
+      console.error('Error:', fferror);
       return;
     }
-
-    // response per second
-    // const timer = setInterval(() => {
-    //   res.status(200).send(stdout);
-    //   console.error('stdout:', stdout);
-    // }, 1000);
-
-    console.log('stdout:', stdout);
-    console.error('stderr:', stderr);
   });
 
   const qualityMetricsCommand = `ffmpeg-quality-metrics results/${req.file.filename} ${req.file.path} \
   -m psnr ssim vmaf`
+  console.log(`QUALITY METRICS: ${qualityMetricsCommand}`)
 
   exec(qualityMetricsCommand, (qmError, qmStdout, qmStderr) => {
     if (qmError) {
       console.error('Error:', qmError);
       return;
     }
-    console.log('stdout:', qmStdout);
-    console.error('stderr:', qmStderr);
 
-    exec(`stat -c "%s" results/${req.file.filename}`, (fsError, fsStdout, fsStderr) => {
+    const fileSizeCommand = `stat -c "%s" results/${req.file.filename}`;
+    console.log(`FILE SIZE: ${fileSizeCommand}`)
+
+    exec(fileSizeCommand, (fsError, fsStdout, fsStderr) => {
       if (fsError) {
         console.error('Error:', fsError);
         return;
       }
-      console.log('stdout:', fsStdout);
       const fileSize = (parseInt(fsStdout) * 0.000001).toFixed(2);
-      console.error('stderr:', fsStderr);
-      
+
       const response = {
-        message: 'Video processed successfully!',
         filename: req.file.filename,
         codec: codec,
         size: fileSize,
-        // SSIM, PSNR y VMAF
         quality_metrics: JSON.parse(qmStdout),
       };    
       res.status(200).send(response);
@@ -96,49 +94,47 @@ app.post('/codecs', upload.single('video'), (req, res) => {
  * @param {import('express').Request} req - The request object.
  * @param {import('express').Response} res - The response object.
  */
-app.post('/command', upload.single('video'), (req, res) => {
-  console.log('Received video:', req.file);
-
+app.post('/command', uploadCommand.single('video'), (req, res) => {
   const command = req.headers.command;
+  const output = req.headers.output;
+  console.log(`---------- COMMAND: ${command}`)
+  
+  const ffmpegCommand = `ffmpeg -i ${req.file.path} ${command} results/${output}`;
+  console.log(`FFMPEG: ${ffmpegCommand}`)
 
-  // Check possible code injection
-  const ffmpegCommand = `ffmpeg -i ${req.file.path} ${command}`;
-
-  exec(ffmpegCommand, (error, stdout, stderr) => {
-    if (error) {
-      console.error('Error:', error);
+  exec(ffmpegCommand, (fferror, ffstdout, ffstderr) => {
+    if (fferror) {
+      console.error('Error:', fferror);
       return;
     }
-    console.log('stdout:', stdout);
-    console.error('stderr:', stderr);
   });
 
-  const qualityMetricsCommand = `ffmpeg-quality-metrics results/${req.file.filename} ${req.file.path} \
+  // POSIBLE PROBLEMA: No se pueden comparar videos de distinto formato (results/avi uploads/mp4)
+  const qualityMetricsCommand = `ffmpeg-quality-metrics results/${output} ${req.file.path} \
   -m psnr ssim vmaf`
+  console.log(`QUALITY METRICS: ${qualityMetricsCommand}`)
 
   exec(qualityMetricsCommand, (qmError, qmStdout, qmStderr) => {
     if (qmError) {
       console.error('Error:', qmError);
       return;
     }
-    console.log('stdout:', qmStdout);
-    console.error('stderr:', qmStderr);
+    console.log(`Quality Metrics ${command}`);
 
-    exec(`stat -c "%s" results/${req.file.filename}`, (fsError, fsStdout, fsStderr) => {
+    const fileSizeCommand = `stat -c "%s" results/${output}`;
+    console.log(`FILE SIZE: ${fileSizeCommand}`)
+
+    exec(fileSizeCommand, (fsError, fsStdout, fsStderr) => {
       if (fsError) {
         console.error('Error:', fsError);
         return;
       }
-      console.log('stdout:', fsStdout);
       const fileSize = (parseInt(fsStdout) * 0.000001).toFixed(2);
-      console.error('stderr:', fsStderr);
-      
+
       const response = {
-        message: 'Video processed successfully!',
         filename: req.file.filename,
-        codec: codec,
+        codec: command,
         size: fileSize,
-        // SSIM, PSNR y VMAF
         quality_metrics: JSON.parse(qmStdout),
       };    
       res.status(200).send(response);
