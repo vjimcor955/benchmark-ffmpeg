@@ -90,7 +90,7 @@
        */
       async runCommandTest(e) {
         e.preventDefault()
-        
+
         // stopwatch since button is pressed (TODO: Change to backwards counting with the speed processing in the Loader component)
         const startTime = Date.now();
         this.stopwatchInterval = setInterval(() => {
@@ -144,15 +144,24 @@
        * @returns {Promise<void>} - A promise that resolves when the command test is completed.
        */
       async commandTest(command) {
+        const commandSplit = command.split(' ')
+        const outputName = commandSplit[commandSplit.length - 1]
+
+        commandSplit.pop(outputName)
+        command = commandSplit.join(' ')
+
         const formData = new FormData()
         formData.append('video', this.video)
         try {
           const response = await axios.post('http://localhost:3000/command', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
-              'command': command
+              'command': command,
+              'input': this.inputVideo,
+              'output': outputName
             }
           })
+          console.log("DATA: ", response.data)
           return response.data
         } catch (error) {
           console.error("ERROR: ", error)
