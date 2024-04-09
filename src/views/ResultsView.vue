@@ -8,7 +8,7 @@
     </div>
     <!-- info about the codec -->
     <div class="data_codec">
-      <h1 class="data_codec__title">{{ results[codecSelected].codec }}</h1>
+      <h1 class="data_codec__title">{{ results[codecSelected].codec }} {{ results[codecSelected].filename }}</h1>
       <!-- Table with general info about a codec process -->
       <div class="data_codec__info">
         <GeneralTable :codecData="results[codecSelected]" class="data_codec__info--table"/>
