@@ -132,7 +132,7 @@ app.post('/command', uploadCommand.single('video'), (req, res) => {
       const fileSize = (parseInt(fsStdout) * 0.000001).toFixed(2);
 
       const response = {
-        filename: req.file.filename,
+        filename: output,
         codec: command,
         size: fileSize,
         quality_metrics: JSON.parse(qmStdout),
