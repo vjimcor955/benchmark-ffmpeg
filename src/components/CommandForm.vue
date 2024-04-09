@@ -65,7 +65,8 @@
       useVideoStore().resetResults(),
       this.command1 = '',
       this.command2 = '',
-      this.command3 = ''
+      this.command3 = '',
+      this.handleVideoName()
     },
     props: {
       video: {
@@ -161,7 +162,6 @@
               'output': outputName
             }
           })
-          console.log("DATA: ", response.data)
           return response.data
         } catch (error) {
           console.error("ERROR: ", error)
@@ -211,6 +211,11 @@
         } else if (e.target.id === 'command3') {
           this.showCommand3 = false
           this.command3 = ''
+        }
+      },
+      handleVideoName() {
+        if (this.video != null) {
+          this.inputVideo = this.video.name
         }
       }
     },
