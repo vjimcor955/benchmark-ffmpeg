@@ -4,6 +4,7 @@
     <nav>
       <RouterLink :to="{name: 'home'}">Home</RouterLink>
       <!-- <RouterLink :to="{name: 'results'}">Results</RouterLink> -->
+      <RouterLink :to="{name: 'player'}">Player</RouterLink>
     </nav>
   </header>
 </template>
