@@ -7,6 +7,9 @@ const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 3000;
 
+app.use(express.static('uploads'));
+app.use(express.static('results'));
+
 /**
  * Multer disk storage configuration for codec endpoint.
  * @type {import('multer').StorageEngine}
