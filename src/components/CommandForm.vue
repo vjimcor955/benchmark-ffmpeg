@@ -92,7 +92,8 @@
       async runCommandTest(e) {
         e.preventDefault()
 
-        // stopwatch since button is pressed (TODO: Change to backwards counting with the speed processing in the Loader component)
+        // TODO: Implement backwards counter using speed processing in the Loader component
+        // stopwatch since button is pressed
         const startTime = Date.now();
         this.stopwatchInterval = setInterval(() => {
           const elapsedTime = Date.now() - startTime;
@@ -127,7 +128,7 @@
           this.loading = true
 
           Promise.all(promises).then(() => {
-            // borrar cuando implemente el contador hacia atras en el componnte Loader
+            // TODO: remove timer when implementing backward timer in Loader component
             clearInterval(this.stopwatchInterval)
             //
 
@@ -158,7 +159,7 @@
             headers: {
               'Content-Type': 'multipart/form-data',
               'command': command,
-              'input': this.inputVideo,
+              'input': this.video.name,
               'output': outputName
             }
           })

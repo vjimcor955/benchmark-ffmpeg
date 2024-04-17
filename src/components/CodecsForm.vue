@@ -90,6 +90,7 @@
         this.buttonDisabled = true
         this.loading = true
 
+        // TODO: Implement backwards counter using speed processing in the Loader component
         // stopwatch since button is pressed
         const startTime = Date.now();
         this.stopwatchInterval = setInterval(() => {
@@ -111,13 +112,12 @@
         })
 
         Promise.all(promises).then(() => {
+          // TODO: remove timer when implementing backward timer in Loader component
           clearInterval(this.stopwatchInterval)
+          // 
+
           this.stopwatchTime = 'Loading results...'
-
           setTimeout(() => {
-            // reset stopwatch and loading
-            this.loading = false
-
             // Redirect to results page
             this.$router.push({ name: 'results' })
           }, 2000)
@@ -135,7 +135,8 @@
           const response = await axios.post('http://localhost:3000/codecs', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
-              'codec': codec
+              'codec': codec,
+              'input': this.video.name
             }
           })
           return response.data
