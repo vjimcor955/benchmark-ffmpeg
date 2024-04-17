@@ -46,7 +46,7 @@ app.use(express.static('results'));
 app.post('/codecs', uploadVideo.single('video'), (req, res) => {
   const codec = req.headers.codec;
   const outputName = `${req.file.originalname.split('.')[0]}_${codec}.${req.file.originalname.split('.')[1]}`;
-  console.log(`---------- CODEC: ${codec}`)
+  console.log(`--- CODEC: ${codec}`)
 
   const ffmpegCommand = `ffmpeg -i ${req.file.path} -c:v ${codec} results/${outputName}`;
   console.log(`FFMPEG: ${ffmpegCommand}`)
@@ -95,7 +95,7 @@ app.post('/codecs', uploadVideo.single('video'), (req, res) => {
 app.post('/command', uploadVideo.single('video'), (req, res) => {
   const command = req.headers.command;
   const outputName = req.headers.output;
-  console.log(`---------- COMMAND: ${command}`)
+  console.log(`--- COMMAND: ${command}`)
   
   const ffmpegCommand = `ffmpeg -i ${req.file.path} ${command} results/${outputName}`;
   console.log(`FFMPEG: ${ffmpegCommand}`)
@@ -106,7 +106,6 @@ app.post('/command', uploadVideo.single('video'), (req, res) => {
     }
   });
 
-  // POSIBLE PROBLEMA: No se pueden comparar videos de distinto formato (results/avi uploads/mp4)
   const qualityMetricsCommand = `ffmpeg-quality-metrics results/${outputName} ${req.file.path} \
   -m psnr ssim vmaf`
   console.log(`QUALITY METRICS: ${qualityMetricsCommand}`)
