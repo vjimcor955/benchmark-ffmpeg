@@ -3,32 +3,18 @@ import cors from 'cors';
 import multer from 'multer';
 import { exec } from 'child_process';
 
+
+// ----- VARIABLES -----
+
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 3000;
-
-app.use(express.static('uploads'));
-app.use(express.static('results'));
-
-/**
- * Multer disk storage configuration for codec endpoint.
- * @type {import('multer').StorageEngine}
- */
-const storageCodec = multer.diskStorage({
-  destination: 'uploads/',
-  filename: function (req, file, cb) {
-    const codec = req.headers.codec;
-    const outputName = `${file.originalname.split('.')[0]}_${codec}.${file.originalname.split('.')[1]}`;
-    cb(null, outputName);
-  }
-});
-const uploadCodec = multer({ storage: storageCodec });
 
 /**
  * Multer disk storage configuration.
  * @type {import('multer').StorageEngine}
  */
-const storageCommand = multer.diskStorage({
+const storageVideo = multer.diskStorage({
   destination: 'uploads/',
   filename: function (req, file, cb) {
     // const outputName = `${file.originalname.split('.')[0]}_${Date.now()}.${file.originalname.split('.')[1]}`;
@@ -36,7 +22,19 @@ const storageCommand = multer.diskStorage({
     cb(null, inputName);
   }
 });
-const uploadCommand = multer({ storage: storageCommand });
+const uploadVideo = multer({ storage: storageVideo });
+
+
+// ----- ENDPOINTS -----
+
+/**
+ * Serves the static files in the uploads and results directories.
+ * 
+ * @param {string} 'uploads' - The directory where the uploaded videos are stored.
+ * @param {string} 'results' - The directory where the converted videos are stored.
+ */
+app.use(express.static('uploads'));
+app.use(express.static('results'));
 
 /**
  * Handles the POST request for the /codecs endpoint.
@@ -45,13 +43,13 @@ const uploadCommand = multer({ storage: storageCommand });
  * @param {import('express').Request} req - The request object.
  * @param {import('express').Response} res - The response object.
  */
-app.post('/codecs', uploadCodec.single('video'), (req, res) => {
+app.post('/codecs', uploadVideo.single('video'), (req, res) => {
   const codec = req.headers.codec;
+  const outputName = `${req.file.originalname.split('.')[0]}_${codec}.${req.file.originalname.split('.')[1]}`;
   console.log(`---------- CODEC: ${codec}`)
 
-  const ffmpegCommand = `ffmpeg -i ${req.file.path} -c:v ${codec} results/${req.file.filename}`;
+  const ffmpegCommand = `ffmpeg -i ${req.file.path} -c:v ${codec} results/${outputName}`;
   console.log(`FFMPEG: ${ffmpegCommand}`)
-
   exec(ffmpegCommand, (fferror, ffstdout, ffstderr) => {
     if (fferror) {
       console.error('Error:', fferror);
@@ -59,19 +57,16 @@ app.post('/codecs', uploadCodec.single('video'), (req, res) => {
     }
   });
 
-  const qualityMetricsCommand = `ffmpeg-quality-metrics results/${req.file.filename} ${req.file.path} \
-  -m psnr ssim vmaf`
+  const qualityMetricsCommand = `ffmpeg-quality-metrics results/${outputName} ${req.file.path} \ -m psnr ssim vmaf`
   console.log(`QUALITY METRICS: ${qualityMetricsCommand}`)
-
   exec(qualityMetricsCommand, (qmError, qmStdout, qmStderr) => {
     if (qmError) {
       console.error('Error:', qmError);
       return;
     }
 
-    const fileSizeCommand = `stat -c "%s" results/${req.file.filename}`;
+    const fileSizeCommand = `stat -c "%s" results/${outputName}`;
     console.log(`FILE SIZE: ${fileSizeCommand}`)
-
     exec(fileSizeCommand, (fsError, fsStdout, fsStderr) => {
       if (fsError) {
         console.error('Error:', fsError);
@@ -80,7 +75,7 @@ app.post('/codecs', uploadCodec.single('video'), (req, res) => {
       const fileSize = (parseInt(fsStdout) * 0.000001).toFixed(2);
 
       const response = {
-        filename: req.file.filename,
+        filename: outputName,
         codec: codec,
         size: fileSize,
         quality_metrics: JSON.parse(qmStdout),
@@ -97,14 +92,13 @@ app.post('/codecs', uploadCodec.single('video'), (req, res) => {
  * @param {import('express').Request} req - The request object.
  * @param {import('express').Response} res - The response object.
  */
-app.post('/command', uploadCommand.single('video'), (req, res) => {
+app.post('/command', uploadVideo.single('video'), (req, res) => {
   const command = req.headers.command;
-  const output = req.headers.output;
+  const outputName = req.headers.output;
   console.log(`---------- COMMAND: ${command}`)
   
-  const ffmpegCommand = `ffmpeg -i ${req.file.path} ${command} results/${output}`;
+  const ffmpegCommand = `ffmpeg -i ${req.file.path} ${command} results/${outputName}`;
   console.log(`FFMPEG: ${ffmpegCommand}`)
-
   exec(ffmpegCommand, (fferror, ffstdout, ffstderr) => {
     if (fferror) {
       console.error('Error:', fferror);
@@ -113,10 +107,9 @@ app.post('/command', uploadCommand.single('video'), (req, res) => {
   });
 
   // POSIBLE PROBLEMA: No se pueden comparar videos de distinto formato (results/avi uploads/mp4)
-  const qualityMetricsCommand = `ffmpeg-quality-metrics results/${output} ${req.file.path} \
+  const qualityMetricsCommand = `ffmpeg-quality-metrics results/${outputName} ${req.file.path} \
   -m psnr ssim vmaf`
   console.log(`QUALITY METRICS: ${qualityMetricsCommand}`)
-
   exec(qualityMetricsCommand, (qmError, qmStdout, qmStderr) => {
     if (qmError) {
       console.error('Error:', qmError);
@@ -124,9 +117,8 @@ app.post('/command', uploadCommand.single('video'), (req, res) => {
     }
     console.log(`Quality Metrics ${command}`);
 
-    const fileSizeCommand = `stat -c "%s" results/${output}`;
+    const fileSizeCommand = `stat -c "%s" results/${outputName}`;
     console.log(`FILE SIZE: ${fileSizeCommand}`)
-
     exec(fileSizeCommand, (fsError, fsStdout, fsStderr) => {
       if (fsError) {
         console.error('Error:', fsError);
@@ -135,7 +127,7 @@ app.post('/command', uploadCommand.single('video'), (req, res) => {
       const fileSize = (parseInt(fsStdout) * 0.000001).toFixed(2);
 
       const response = {
-        filename: output,
+        filename: outputName,
         codec: command,
         size: fileSize,
         quality_metrics: JSON.parse(qmStdout),
