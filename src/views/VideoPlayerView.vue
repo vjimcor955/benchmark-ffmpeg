@@ -19,29 +19,24 @@
 
 
 <script>
-  /**
-   * VIDEO PLAYERS
-   * 
-   * - https://vivictorg.github.io/vivict/
-   * - https://github.com/pixop/video-compare
-   * - https://www.npmjs.com/package/@epiclabs/epic-video-comparator
-   * 
-   */
-
   export default {
     name: 'VideoPlayer',
     data() {
       return {
-        videosList: [ 
-          'city.mp4',
-          'output.webm'
-        ],
+        videosList: [],
         leftVideo: 'placeholder',
         rightVideo: 'placeholder'
       }
     },
     mounted() {
       this.loadVideoPlayer('https://vivictorg.github.io/vivict/');
+      this.fillVideosList();
+    },
+    props: {
+      results: {
+        type: List,
+        required: true
+      }
     },
     methods: {
       handleVideoPlayerUrl() {
@@ -55,6 +50,13 @@
       loadVideoPlayer(url) {
         // Set the source of the iframe to the player URL
         this.$refs.videoPlayerFrame.src = url;  
+      },
+      fillVideosList() {
+        console.log("fillVideosList")
+        // Recicibir los videos en el promp y añadirlos a la lista de videos para sacarlos por los selects (controlar tambien que no se repitan en los selects)
+        results.forEach(video => {
+          this.videosList.push(video.filename);
+        });
       }
     }
   };

@@ -19,9 +19,11 @@
       </div>
       <!-- Charts with all the codecs quality metrics -->
       <div class="data_codec__charts">
-        <MetricsCharts :codecData="results" class=""/>
+        <MetricsCharts :codecData="results"/>
       </div>
     </div>
+    <!-- TODO: Boton para redireccionar a la vista de comparación de videos pasado results como promp -->
+    <!-- <RouterLink :to="{name: 'player'}" :videosList="results">Compare videos</RouterLink> -->
   </div>
 </template>
 
