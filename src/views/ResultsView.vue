@@ -5,6 +5,7 @@
       <a @click="codecSelector" class="results__navbar--codec selected">Codec 1</a>
       <a v-if="codecs >= 2" @click="codecSelector" class="results__navbar--codec">Codec 2</a>
       <a v-if="codecs == 3" @click="codecSelector" class="results__navbar--codec">Codec 3</a>
+      <RouterLink :to="{name: 'player'}" class="results__navbar--router_link">Compare videos</RouterLink>
     </div>
     <!-- info about the codec -->
     <div class="data_codec">
@@ -22,8 +23,6 @@
         <MetricsCharts :codecData="results"/>
       </div>
     </div>
-    <!-- TODO: Boton para redireccionar a la vista de comparación de videos pasado results como promp -->
-    <!-- <RouterLink :to="{name: 'player'}" :videosList="results">Compare videos</RouterLink> -->
   </div>
 </template>
 
@@ -97,6 +96,8 @@ export default {
       display: flex;
       flex-direction: row;
       gap: 20px;
+      width: 70vw;
+      justify-content: center;
       
       a {
         font-size: 1.1em;
@@ -111,13 +112,20 @@ export default {
       a.selected {
         text-decoration: underline;
       }
+
+      &--router_link {
+        color: #000;
+        position: absolute;
+        right: 15vw;
+        text-decoration: none;
+      }
     }
     
     .data_codec {
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 75vw;
+      width: 65vw;
       height: fit-content;
       gap: 50px;
       padding: 50px;
