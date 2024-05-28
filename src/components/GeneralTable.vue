@@ -81,14 +81,14 @@
 
       th {
         align-items: center;
-        border: 1px solid #000;
+        border: 2px solid #000;
         padding: 10px;
         font-weight: bold;
       }
 
       td {
         align-items: center;
-        border: 1px solid #000;
+        border: 2px solid #000;
         padding: 10px;
       }
     }
