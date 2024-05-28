@@ -1,8 +1,7 @@
 <template>
   <div class="command">
     <form class="command__form">
-      <h1>FFmpeg commands</h1>
-      <p>Write the ffmpeg commands:</p>
+      <h2>Write the ffmpeg commands:</h2>
       <div class="command__form--fields">
         <div class="command__form--fields--input">
           <label for="command1">ffmpeg -i {{ inputVideo }}</label>
@@ -19,9 +18,9 @@
           <a @click="deleteField" id="command3" class="delete_field">X</a>
         </div>    
       </div>
-      <a v-if="!showCommand2" @click="showCommand2 = !showCommand2" class="add_command">Add Command</a>
-      <a v-if="showCommand2 && !showCommand3" @click="showCommand3 = !showCommand3" class="add_command">Add Command</a>
-      <input type="submit" value="Run command test" @click="runCommandTest" :disabled="buttonDisabled">
+      <a v-if="!showCommand2" @click="showCommand2 = !showCommand2" class="add_command link">Add Command</a>
+      <a v-if="showCommand2 && !showCommand3" @click="showCommand3 = !showCommand3" class="add_command link">Add Command</a>
+      <input type="submit" value="Run command test" @click="runCommandTest" :disabled="buttonDisabled" class="primary_button">
     </form>
     <div v-if="loading" class="command__loader">
       <Loader />
@@ -45,7 +44,7 @@
     name: 'CommandsForm',
     data() {
       return {
-        inputVideo: '',
+        inputVideo: 'video_name',
         command1: '',
         command2: '',
         command3: '',
@@ -225,6 +224,8 @@
 
 
 <style lang="scss">
+  @import "../assets/sass/main.scss";
+
   .command {
     display: flex;
     flex-direction: column;
@@ -239,8 +240,8 @@
       align-items: center;
       gap: 40px;
   
-      h1 {
-        font-size: 1.5rem;
+      h2 {
+        font-size: 1.2rem;
         text-align: center;
         font-weight: bold;
       }
@@ -272,30 +273,13 @@
             border-radius: 50%;
           }
           .delete_field:hover {
-            background-color: #f0f0f0;
+            font-weight: 900;
           }
         }
       }
-        
-      .add_command {
-        width: fit-content;
-        cursor: pointer;
-        text-decoration: underline;
-        padding: 5px;
-        border-radius: 5px;
   
-      }
-      .add_command:hover {
-        background-color: #f0f0f0;
-      }
-  
-      input[type="submit"] {
-        font-size: 1.1em;
-        padding: 10px;
-        border: 1px solid #000;
-        border-radius: 5px;
-        cursor: pointer;
-      }  
+      @include link(#000);
+      @include primary-button($accent_color);
     }
 
     &__loader {
