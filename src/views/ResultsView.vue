@@ -1,11 +1,13 @@
 <template>
   <div class="results">
     <!-- navbar to choose codec -->
-    <div class="results__navbar">
-      <a @click="codecSelector" class="results__navbar--codec selected navbar">Codec 1</a>
-      <a v-if="codecs >= 2" @click="codecSelector" class="results__navbar--codec navbar">Codec 2</a>
-      <a v-if="codecs == 3" @click="codecSelector" class="results__navbar--codec navbar">Codec 3</a>
-      <RouterLink :to="{name: 'player'}" class="results__navbar--router_link secondary_button">Compare videos</RouterLink>
+    <div class="results__header">
+      <div class="navbar">
+        <a @click="codecSelector" class="navbar__button selected">Codec 1</a>
+        <a v-if="codecs >= 2" @click="codecSelector" class="navbar__button">Codec 2</a>
+        <a v-if="codecs == 3" @click="codecSelector" class="navbar__button">Codec 3</a>
+      </div>
+      <RouterLink :to="{name: 'player'}" class="results__header--router_link secondary_button">Compare videos</RouterLink>
     </div>
     <!-- info about the codec -->
     <div class="data_codec">
@@ -94,20 +96,12 @@ export default {
     gap: 40px;
     margin: 50px;
     
-    &__navbar {
-      height: 50px;
+    &__header {
+      width: 70vw;
       display: flex;
       flex-direction: row;
-      gap: 20px;
-      width: 70vw;
       justify-content: center;
       align-items: center;
-      
-      a.selected {
-        text-decoration: underline;
-        font-weight: 900;
-        border: 0.2em solid $details_color;
-      }
 
       &--router_link {
         position: absolute;
@@ -125,6 +119,7 @@ export default {
       height: fit-content;
       gap: 50px;
       padding: 50px;
+      background-color: $components_color;
       box-shadow: 0px 187px 75px rgba(0, 0, 0, 0.01), 0px 105px 63px rgba(0, 0, 0, 0.05), 0px 47px 47px rgba(0, 0, 0, 0.09), 0px 12px 26px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
       
       &__title {

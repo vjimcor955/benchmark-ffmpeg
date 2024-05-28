@@ -1,16 +1,18 @@
 <template>
   <div class="videoPlayer">
-    <div class="videoPlayer__navbar">
-      <RouterLink :to="{name: 'results'}" class="videoPlayer__navbar--router_link secondary_button">Return to Results</RouterLink>
-      <select v-model="leftVideo" name="leftVideo" id="leftVideo" class="navbar-select">
-        <option value="placeholder" selected>Left video</option>
-        <option v-for="video in videosList" :key="video" :value="video.filename">{{ video.filename }}</option>
-      </select>
-      <button @click="handleVideoPlayerUrl" class="primary_button">Refresh player</button>
-      <select v-model="rightVideo" name="rightVideo" id="rightVideo" class="navbar-select">
-        <option value="placeholder" selected>Right video</option>
-        <option v-for="video in videosList" :key="video" :value="video.filename">{{ video.filename }}</option>
-      </select>
+    <div class="videoPlayer__header">
+      <RouterLink :to="{name: 'results'}" class="videoPlayer__header--router_link secondary_button">Return to Results</RouterLink>
+      <div class="navbar">
+        <select v-model="leftVideo" name="leftVideo" id="leftVideo" class="navbar__select">
+          <option value="placeholder" selected>Left video</option>
+          <option v-for="video in videosList" :key="video" :value="video.filename">{{ video.filename }}</option>
+        </select>
+        <button @click="handleVideoPlayerUrl" class="primary_button">Refresh player</button>
+        <select v-model="rightVideo" name="rightVideo" id="rightVideo" class="navbar__select">
+          <option value="placeholder" selected>Right video</option>
+          <option v-for="video in videosList" :key="video" :value="video.filename">{{ video.filename }}</option>
+        </select>
+      </div>
     </div>
     <div class="videoPlayer__div">
       <iframe ref="videoPlayerFrame" width="100%" height="100%" frameborder="0"></iframe>
@@ -67,14 +69,19 @@
 
   .videoPlayer {
     min-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 50px;
 
-    &__navbar {
+    &__header {
+      width: 70vw;
       display: flex;
       flex-direction: row;
-      gap: 20px;
-      width: 70vw;
       justify-content: center;
-      margin: 50px auto;
+      align-items: center;
 
       &--router_link {
         position: absolute;
