@@ -8,7 +8,7 @@
         :options="chartOptions"
       />
     </div>
-    <a @click="showMoreCharts = !showMoreCharts" class="show_charts">{{ showMoreCharts ? "Hide charts" : "Show more charts" }}</a>
+    <a @click="showMoreCharts = !showMoreCharts" class="link">{{ showMoreCharts ? "Hide charts" : "Show more charts" }}</a>
     <div v-if="showMoreCharts" class="more_charts">
       <div class="data_charts__metric">
         <p class="data_charts__metric--title">SSIM per frame - Higher values indicate better structural similarity between images</p>
@@ -109,6 +109,8 @@
 
 
 <style lang="scss">
+  @import "../assets/sass/main.scss";
+
   .data_charts, .more_charts {
     width: 100%;
     display: flex;
@@ -122,7 +124,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 5px;
+      gap: 25px;
 
       &--title {
         font-size: 1.1em;
@@ -134,16 +136,6 @@
       }
     }
 
-    .show_charts {
-      width: fit-content;
-      cursor: pointer;
-      text-decoration: underline;
-      padding: 15px;
-      border-radius: 5px;
-      
-    }
-    .show_charts:hover {
-      background-color: #f0f0f0;
-    }
+    @include link(#000);
   }
 </style>
