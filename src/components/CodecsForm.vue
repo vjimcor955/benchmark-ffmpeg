@@ -23,7 +23,13 @@
       <input type="submit" value="Run codecs tests" @click="runCodecsTests" :disabled="buttonDisabled" class="primary_button">
     </form>
     <div v-if="loading" class="loading">
-      <Loader />
+      <!-- <Loader /> -->
+      <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+      </div>
       <div class="loading__content">
         <p class="loading__content--message">Processing video...</p>
         <p class="loading__content--timer">{{ stopwatchTime }}</p>
@@ -228,14 +234,12 @@
     }
 
     .loading {
-      height: 100px;
       width: 500px;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 15%;
-      margin-bottom: 40px;
-
+      
       .loader {
         --dim: 3rem;
         width: var(--dim);
@@ -310,7 +314,7 @@
         }
 
         &--timer {
-          font-size: 1.5em;
+          font-size: 1.4em;
           font-weight: bold;
         }
       }
