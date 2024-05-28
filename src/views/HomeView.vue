@@ -75,18 +75,19 @@
   @import "../assets/sass/main.scss";
 
   .home {
-    min-height: calc(100vh - 120px);
+    min-height: calc(100vh - 220px);
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
-    gap: 50px;
+    justify-content: flex-start;
+    gap: 40px;
+    margin: 50px;
 
     .video_field {
       display: flex;
       flex-direction: column;
       gap: 20px;
-      margin-top: 75px;
+      margin-top: 15px;
 
       .custum-file-upload {
         height: 20px;
@@ -136,24 +137,10 @@
       }
     }
 
-    .form_navbar {
-      display: flex;
-      gap: 25px;
-      border: 0.185em solid $details_color;
-      border-radius: 0.9375em;
-      padding: 10px 50px;
-
-      a.selected {
-        text-decoration: underline;
-        font-weight: 900;
-        box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-      }
-    }
-
     .selected_form {
       background-color: $components_color;
       @include box-shadow($details_color);
-    }
+    } 
   }
   
 </style>

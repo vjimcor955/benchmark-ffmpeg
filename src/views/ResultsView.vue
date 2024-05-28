@@ -88,7 +88,7 @@ export default {
   @import "../assets/sass/main.scss";
 
   .results {
-    min-height: calc(100vh - 80px);
+    min-height: calc(100vh - 120px);
     display: flex;
     flex-direction: column;
     align-items: center;
