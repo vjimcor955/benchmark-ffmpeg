@@ -2,14 +2,14 @@
   <div class="results">
     <!-- navbar to choose codec -->
     <div class="results__navbar">
-      <a @click="codecSelector" class="results__navbar--codec selected">Codec 1</a>
-      <a v-if="codecs >= 2" @click="codecSelector" class="results__navbar--codec">Codec 2</a>
-      <a v-if="codecs == 3" @click="codecSelector" class="results__navbar--codec">Codec 3</a>
-      <RouterLink :to="{name: 'player'}" class="results__navbar--router_link">Compare videos</RouterLink>
+      <a @click="codecSelector" class="results__navbar--codec selected navbar">Codec 1</a>
+      <a v-if="codecs >= 2" @click="codecSelector" class="results__navbar--codec navbar">Codec 2</a>
+      <a v-if="codecs == 3" @click="codecSelector" class="results__navbar--codec navbar">Codec 3</a>
+      <RouterLink :to="{name: 'player'}" class="results__navbar--router_link secondary_button">Compare videos</RouterLink>
     </div>
     <!-- info about the codec -->
     <div class="data_codec">
-      <h1 class="data_codec__title">{{ results[codecSelected].codec }} {{ results[codecSelected].filename }}</h1>
+      <h1 class="data_codec__title"> Codec: {{ results[codecSelected].codec }} | Video: {{ results[codecSelected].filename }}</h1>
       <!-- Table with general info about a codec process -->
       <div class="data_codec__info">
         <GeneralTable :codecData="results[codecSelected]" class="data_codec__info--table"/>
@@ -83,6 +83,8 @@ export default {
 
 
 <style lang="scss">
+  @import "../assets/sass/main.scss";
+
   .results {
     min-height: calc(100vh - 80px);
     display: flex;
@@ -93,32 +95,26 @@ export default {
     margin: 50px;
     
     &__navbar {
+      height: 50px;
       display: flex;
       flex-direction: row;
       gap: 20px;
       width: 70vw;
       justify-content: center;
+      align-items: center;
       
-      a {
-        font-size: 1.1em;
-        cursor: pointer;
-        padding: 10px;
-        border-radius: 5px;
-        border: #000 1px solid;
-      }
-      a:hover {
-        background-color: #f0f0f0;
-      }
       a.selected {
         text-decoration: underline;
+        font-weight: 900;
+        border: 0.2em solid $details_color;
       }
 
       &--router_link {
-        color: #000;
         position: absolute;
         right: 15vw;
-        text-decoration: none;
       }
+
+      @include secondary_button($accent_color, -100%); 
     }
     
     .data_codec {
