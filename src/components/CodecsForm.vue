@@ -1,8 +1,7 @@
 <template>
   <div class="codec">
     <form class="codec__form">
-      <h1>Codecs Selector</h1>
-      <p>Write the video codecs:</p>
+      <h2>Write the video codecs:</h2>
       <div class="codec__form--fields">
         <div class="codec__form--fields--input">
           <label for="codec1">Codec 1:</label>
@@ -19,9 +18,9 @@
           <a @click="deleteField" id="codec3" class="delete_field">X</a>
         </div>
       </div>
-      <a v-if="!showCodec2" @click="showCodec2 = !showCodec2" class="add_codec">Add Codec</a>
-      <a v-if="showCodec2 && !showCodec3" @click="showCodec3 = !showCodec3" class="add_codec">Add Codec</a>
-      <input type="submit" value="Run codecs tests" @click="runCodecsTests" :disabled="buttonDisabled">
+      <a v-if="!showCodec2" @click="showCodec2 = !showCodec2" class="add_codec link">Add Codec</a>
+      <a v-if="showCodec2 && !showCodec3" @click="showCodec3 = !showCodec3" class="add_codec link">Add Codec</a>
+      <input type="submit" value="Run codecs tests" @click="runCodecsTests" :disabled="buttonDisabled" class="primary_button">
     </form>
     <div v-if="loading" class="loading">
       <Loader />
@@ -166,6 +165,8 @@
 
 
 <style lang="scss">
+  @import "../assets/sass/main.scss";
+
   .codec {
     display: flex;
     flex-direction: column;
@@ -173,15 +174,15 @@
 
     &__form {
       display: flex;
-      width: 50vw;
+      width: 40vw;
       padding: 50px;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       gap: 40px;
       
-      h1 {
-        font-size: 1.5rem;
+      h2 {
+        font-size: 1.2rem;
         text-align: center;
         font-weight: bold;
       }
@@ -217,31 +218,13 @@
             border-radius: 50%;
           }
           .delete_field:hover {
-            background-color: #f0f0f0;
+            font-weight: 900;
           }
         }
       }
-      
-      .add_codec {
-        width: fit-content;
-        cursor: pointer;
-        text-decoration: underline;
-        padding: 5px;
-        border-radius: 5px;
-        // border: #000 1px solid;
-        
-      }
-      .add_codec:hover {
-        background-color: #f0f0f0;
-      }
-      
-      input[type="submit"] {
-        font-size: 1.1em;
-        padding: 10px;
-        border: 1px solid #000;
-        border-radius: 5px;
-        cursor: pointer;
-      }
+
+      @include link(#000);
+      @include primary-button($accent_color);
     }
 
     .loading {
