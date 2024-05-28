@@ -1,13 +1,13 @@
 <template>
   <div class="videoPlayer">
     <div class="videoPlayer__navbar">
-      <RouterLink :to="{name: 'results'}" class="videoPlayer__navbar--router_link">Return to Results</RouterLink>
-      <select v-model="leftVideo" name="leftVideo" id="leftVideo">
+      <RouterLink :to="{name: 'results'}" class="videoPlayer__navbar--router_link secondary_button">Return to Results</RouterLink>
+      <select v-model="leftVideo" name="leftVideo" id="leftVideo" class="navbar-select">
         <option value="placeholder" selected>Left video</option>
         <option v-for="video in videosList" :key="video" :value="video.filename">{{ video.filename }}</option>
       </select>
-      <button @click="handleVideoPlayerUrl">Refresh player</button>
-      <select v-model="rightVideo" name="rightVideo" id="rightVideo">
+      <button @click="handleVideoPlayerUrl" class="primary_button">Refresh player</button>
+      <select v-model="rightVideo" name="rightVideo" id="rightVideo" class="navbar-select">
         <option value="placeholder" selected>Right video</option>
         <option v-for="video in videosList" :key="video" :value="video.filename">{{ video.filename }}</option>
       </select>
@@ -63,8 +63,11 @@
 
 
 <style lang="scss">
+  @import "../assets/sass/main.scss";
+
   .videoPlayer {
-    
+    min-height: calc(100vh - 80px);
+
     &__navbar {
       display: flex;
       flex-direction: row;
@@ -73,41 +76,13 @@
       justify-content: center;
       margin: 50px auto;
 
-      select {
-        width: 190px;
-        text-align: center;
-        padding: 0.5rem;
-        font-size: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-      }
-
-      button {
-        font-size: 1.1em;
-        cursor: pointer;
-        padding: 10px;
-        border-radius: 5px;
-        border: #000 1px solid;
-      }
-     
-      a:hover {
-        background-color: #f0f0f0;
-      }
-      a.selected {
-        text-decoration: underline;
-      }
-
       &--router_link {
-        font-size: 1.1em;
-        cursor: pointer;
-        padding: 12px;
-        border-radius: 5px;
-        border: #000 1px solid;
-        color: #000;
         position: absolute;
         left: 15vw;
-        text-decoration: none;
       }
+
+      @include primary_button($accent_color); 
+      @include secondary_button($accent_color, 100%); 
     }
 
     &__div {
