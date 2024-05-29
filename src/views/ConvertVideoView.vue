@@ -86,14 +86,13 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      margin-top: 90px;
+      margin-top: 70px;
 
       .custum-file-upload {
         height: 20px;
         width: 300px;
         display: flex;
         flex-direction: row;
-        align-items: space-between;
         gap: 20px;
         cursor: pointer;
         align-items: center;
@@ -139,6 +138,7 @@
     .selected_form {
       background-color: $components_color;
       @include box-shadow($details_color);
+      margin-bottom: 50px;
     } 
   }
   
