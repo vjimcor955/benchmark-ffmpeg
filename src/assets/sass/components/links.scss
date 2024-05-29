@@ -1,0 +1,63 @@
+// Links mixins
+
+@mixin link($color) {
+  .link {
+    cursor: pointer;
+    color: $color;
+    font-size: 1.1rem;
+    text-decoration: none;
+    position: relative;
+  
+    &::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background-color: $color;
+      transition: width 0.5s;
+    }
+  
+    &:hover::after {
+      width: 100%;
+    }
+  }
+
+  .router-link-active.router-link-exact-active.link {
+    color: $color;
+    
+    &::after {
+      width: 100%;
+    }
+  }
+}
+
+@mixin link__button($color) {
+  .link__button {
+    cursor: pointer;
+    color: $color;
+    font-size: 1.1rem;
+    text-decoration: none;
+    position: relative;
+    padding: 0.5rem 1rem;
+    border: 2px solid $color;
+    border-radius: 0.5rem;
+    background-color: transparent;
+    transition: background-color 0.5s, color 0.5s, border-color 0.5s, font-weight 0.5s;
+
+    &:hover {
+      background-color: $color;
+      color: $secondary_color;
+      border-color: $secondary_color;
+      font-weight: 700;
+    }
+  }
+  
+  .router-link-active.router-link-exact-active.link__button {
+    background-color: $color;
+    color: $secondary_color;
+    border-color: $secondary_color;
+    font-weight: 700;
+  }
+}
