@@ -3,7 +3,8 @@
     <div class="home__content">
       <h2 class="home__content--title">Welcome to FFmpeg Benchmark</h2>
       <p class="home__content--message">Run different FFmpeg commands simultaneously to obtain performance test results with the ability to compare the resulting videos in the same player.</p>
-      <RouterLink :to="{name: 'login'}" class="primary_button">Sign up</RouterLink>
+      <RouterLink :to="{name: 'login'}" class="primary_button" v-if="!isLogged">Sign in</RouterLink>
+      <RouterLink :to="{name: 'convert-video'}" class="primary_button" v-else>Convert video</RouterLink>
     </div>
     <img src="../assets/1920x1080.svg" alt="Imagen home">
 </div>
@@ -11,7 +12,16 @@
 
 
 <script>
+  import {useAuthStore} from '../stores/authStore.js'
 
+  export default {
+    name: 'HomeView',
+    computed: {
+      isLogged() {
+        return useAuthStore().isLogged
+      }
+    },
+  }
 </script>
 
 
