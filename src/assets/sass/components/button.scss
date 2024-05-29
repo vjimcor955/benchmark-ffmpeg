@@ -23,6 +23,14 @@
       width: 100%;
     }
   }
+
+  .router-link-active.router-link-exact-active.link {
+    color: $color;
+    
+    &::after {
+      width: 100%;
+    }
+  }
 }
 
 @mixin link__button($color) {
@@ -44,6 +52,13 @@
       border-color: $secondary_color;
       font-weight: 700;
     }
+  }
+  
+  .router-link-active.router-link-exact-active.link__button {
+    background-color: $color;
+    color: $secondary_color;
+    border-color: $secondary_color;
+    font-weight: 700;
   }
 }
 
