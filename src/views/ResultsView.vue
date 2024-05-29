@@ -7,7 +7,7 @@
         <a v-if="codecs >= 2" @click="codecSelector" class="navbar__button">Codec 2</a>
         <a v-if="codecs == 3" @click="codecSelector" class="navbar__button">Codec 3</a>
       </div>
-      <RouterLink :to="{name: 'player'}" class="results__header--router_link secondary_button">Compare videos</RouterLink>
+      <RouterLink :to="{name: 'video-player'}" class="results__header--router_link secondary_button">Compare videos</RouterLink>
     </div>
     <!-- info about the codec -->
     <div class="data_codec">
@@ -88,7 +88,7 @@ export default {
   @import "../assets/sass/main.scss";
 
   .results {
-    min-height: calc(100vh - 120px);
+    min-height: inherit;
     display: flex;
     flex-direction: column;
     align-items: center;
