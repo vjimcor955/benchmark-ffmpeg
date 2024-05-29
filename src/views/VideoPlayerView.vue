@@ -68,7 +68,7 @@
   @import "../assets/sass/main.scss";
 
   .videoPlayer {
-    min-height: calc(100vh - 120px);
+    min-height: inherit;
     display: flex;
     flex-direction: column;
     align-items: center;
