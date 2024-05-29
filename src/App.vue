@@ -25,7 +25,7 @@
   @import "./assets/sass/main.scss";
 
   main {
-    min-height: calc(100vh - 140px);
+    min-height: calc(100vh - 120px);
     font-family: "Nunito";
     background-color: $background-color;
   }
