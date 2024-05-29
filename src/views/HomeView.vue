@@ -21,21 +21,21 @@
   .home {
     min-height: inherit;
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 5%;
 
     .home__content {
-      height: 400px;
-      width: 35%;
+      height: 300px;
+      width: 30%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: flex-start;
-      gap: 50px;
+      gap: 45px;
 
       &--title {
-        margin-top: 50px;
         font-size: 2rem;
         font-weight: bolder;
       }
@@ -49,7 +49,7 @@
 
     img {
       width: auto;
-      height: 400px;
+      height: 300px;
     }
   }
 </style>

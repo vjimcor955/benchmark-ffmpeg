@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="login">
     <h1>LOGIN</h1>
     <button @click="handleLogin">Login</button>
 </div>
@@ -23,37 +23,12 @@
 
 
 <style lang="scss">
-  .home {
+  .login {
     min-height: inherit;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    // gap: 5%;
-
-    .home__content {
-      height: 350px;
-      width: 450px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: left;
-      gap:50px;
-
-      &--title {
-        margin-top: 50px;
-        font-size: 2rem;
-        font-weight: bolder;
-      }
-
-      &--message {
-        font-size: 1.1rem;
-      }
-
-    } 
-
-    img {
-      width: 600px;
-      height: 400px;
-    }
+    gap: 100px;
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="convertVideo">
     <div class="video_field">
       <label class="custum-file-upload" for="video">
         <div class="icon">
@@ -74,7 +74,7 @@
 <style lang="scss">
   @import "../assets/sass/main.scss";
 
-  .home {
+  .convertVideo {
     min-height: inherit;
     display: flex;
     flex-direction: column;
