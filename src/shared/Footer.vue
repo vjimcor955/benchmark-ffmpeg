@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    <h3 class="footer__signature">FFmpeg Benchmark developed by Víctor Jiménez Corada</h3>
+    <h3 class="footer__signature"><span>FFmpeg Benchmark</span> developed by Víctor Jiménez Corada</h3>
     <div class="footer__socials">
       <div class="footer__socials--github">
         <img src="../assets/github_icon.svg" alt="Github icon" class="socials__github--img">
@@ -26,12 +26,16 @@
     align-items: center;
     gap: 10%;
     padding: 0px 10rem;
-    // background-color: $accent_color;
-    background-color: #39544b;
+    background-color: $accent_color;
     color: #fff;
 
     &__signature {
       font-size: 1.1rem;
+
+      span {
+        font-family: Orbitron;
+        font-weight: bold;
+      }
     }
 
     &__socials {
