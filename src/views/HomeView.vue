@@ -46,8 +46,9 @@
       gap: 45px;
 
       &--title {
-        font-size: 2rem;
-        font-weight: bolder;
+        font-size: 1.9rem;
+        font-weight: bold;
+        font-family: Orbitron;
       }
 
       &--message {
