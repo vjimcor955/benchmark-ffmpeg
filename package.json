@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "^1.6.8",
     "pinia": "^2.1.7",
+    "pinia-plugin-persist": "^1.0.0",
     "sass": "^1.72.0",
     "vue": "^3.4.21",
     "vue-google-charts": "^1.1.0",
