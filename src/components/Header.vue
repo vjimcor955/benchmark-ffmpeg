@@ -3,16 +3,16 @@
     <h3 class="header__title">FFmpeg Benchmark</h3>
     <nav class="header__navbar">
       <!-- public layout -->
-      <RouterLink :to="{name: 'root-home'}" class="header__navbar link">Home</RouterLink>
+      <RouterLink :to="{name: 'root-home'}" class="link">Home</RouterLink>
 
       <!-- private layout -->
-      <RouterLink :to="{name: 'private-user'}" class="header__navbar link" v-if="isLogged">User</RouterLink>
-      <RouterLink :to="{name: 'convert-video'}" class="header__navbar link__button" v-if="isLogged">Convert video</RouterLink>
+      <RouterLink :to="{name: 'private-user'}" class="link" v-if="isLogged">User</RouterLink>
+      <RouterLink :to="{name: 'convert-video'}" class="link__button" v-if="isLogged">Convert video</RouterLink>
 
       <!-- Sign in / Log out buttons -->
       <div class="header__nabvar--login">
-        <RouterLink :to="{name: 'login'}" class="header__navbar link__button" v-if="!isLogged">Sign in</RouterLink>
-        <RouterLink :to="{name: 'root-home'}" v-else class="header__navbar link__button" @click="handleLogout">Log out</RouterLink>
+        <RouterLink :to="{name: 'login'}" class="link__button" v-if="!isLogged">Sign in</RouterLink>
+        <button v-else class="link__button" @click="handleLogout">Log out</button>
       </div>
     </nav>
   </header>
@@ -31,7 +31,10 @@
     },
     methods: {
       handleLogout() {
-        useAuthStore().logOut()
+        setTimeout(() => {
+          useAuthStore().logOut()
+          this.$router.push({name: "root-home"});
+        }, 500);
       }
     }
   }
