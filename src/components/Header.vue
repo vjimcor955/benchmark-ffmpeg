@@ -3,14 +3,17 @@
     <h3 class="header__title">FFmpeg Benchmark</h3>
     <nav class="header__navbar">
       <!-- public layout -->
-      <RouterLink :to="{name: 'home'}" class="header__navbar link">Home</RouterLink>
-      <!-- <RouterLink :to="{name: 'sign-in'}" class="header__navbar button">Sign in</RouterLink> -->
-      <!-- private layout -->
-      <!-- <RouterLink :to="{name: 'user'}" class="header__navbar link">User</RouterLink> -->
-      <!-- <RouterLink :to="{name: 'convert-video'}" class="header__navbar link__button">Convert video</RouterLink> -->
-      <!-- <button class="header__navbar link__button">Log out</button> -->
+      <RouterLink :to="{name: 'root-home'}" class="header__navbar link">Home</RouterLink>
 
-      <RouterLink :to="{name: 'player'}" class="header__navbar link__button">Sign in</RouterLink>
+      <!-- private layout -->
+      <RouterLink :to="{name: 'private-user'}" class="header__navbar link" v-if="isLogged">User</RouterLink>
+      <RouterLink :to="{name: 'convert-video'}" class="header__navbar link__button" v-if="isLogged">Convert video</RouterLink>
+
+      <!-- Sign in / Log out buttons -->
+      <div class="header__nabvar--login">
+        <RouterLink :to="{name: 'login'}" class="header__navbar link__button" v-if="!isLogged">Sign in</RouterLink>
+        <RouterLink :to="{name: 'root-home'}" v-else class="header__navbar link__button" @click="handleLogout">Log out</RouterLink>
+      </div>
     </nav>
   </header>
 </template>
@@ -18,9 +21,19 @@
 
 <script>
   import { RouterLink } from 'vue-router'
+  import {useAuthStore} from '../stores/authStore.js'
 
   export default {
-    
+    computed: {
+      isLogged() {
+        return useAuthStore().isLogged
+      }
+    },
+    methods: {
+      handleLogout() {
+        useAuthStore().logOut()
+      }
+    }
   }
 </script>
 
