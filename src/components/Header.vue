@@ -55,8 +55,9 @@
     @include box-gradient($secondary_color);
 
     &__title {
-      font-size: 1.5rem;
+      font-size: 1.7rem;
       font-weight: bold;
+      font-family: Orbitron;
     }
 
     &__navbar {
