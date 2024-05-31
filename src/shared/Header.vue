@@ -22,6 +22,7 @@
 <script>
   import { RouterLink } from 'vue-router'
   import {useAuthStore} from '../stores/authStore.js'
+  import { toast } from "vue3-toastify";
 
   export default {
     computed: {
@@ -31,10 +32,13 @@
     },
     methods: {
       handleLogout() {
+        toast.info("Logging out...", {
+          timeout: 2000       
+        });
         setTimeout(() => {
           useAuthStore().logOut()
           this.$router.push({name: "root-home"});
-        }, 500);
+        }, 2000);
       }
     }
   }
