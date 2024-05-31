@@ -6,46 +6,24 @@
       <div class="circle"></div>
       <div class="circle"></div>
     </div>
-    <!-- <div class="loading__content">
-      <p class="loading__content--message">Processing video...</p>
-      <p class="loading__content--timer">{{ stopwatchTime }}</p>
-      <p class="loading__content--timer">{{ processingSpeed }}</p>
-    </div> -->
   </div>
 </template>
 
 
 <script>
   export default {
-    name: 'Loader',
-    data() {
-      return {
-        stopwatchInterval: null,
-        stopwatchTime: null,
-        processingSpeed: null,
-      }
-    },
-    methods: {
-      // -stats              print progress report during encoding (ffmpeg property)
-
-
-      // method to create a revese timer using the propessing speed and the video duration
-
-      // axios call to get the speed processing
-    }
+    name: 'Loader'
   }
 </script>
 
 
 <style lang="scss">
   .loading {
-    height: 100px;
-    width: 500px;
+    height: 75px;
+    width: 75px;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15%;
-    margin-bottom: 40px;
 
     .loader {
       --dim: 3rem;
