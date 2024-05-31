@@ -34,6 +34,7 @@
 <script>
   import axios from 'axios';
   import Loader from '../components/Loader.vue';
+  import { toast } from "vue3-toastify";
 
   export default {
     name: 'RegisterForm',
@@ -117,6 +118,10 @@
           if (response.data.message === 'Email already in use.') return this.emailUsed = true
           this.registered = true
           this.loading = true
+          toast.success("Successfully registered", {
+            timeout: 2000,
+            position: "top-center"
+          });
           setTimeout(() => {
             this.$emit('registered', false);
           }, 2000);

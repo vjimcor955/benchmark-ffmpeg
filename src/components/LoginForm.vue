@@ -12,7 +12,7 @@
       </div>
       <input type="submit" value="Login" v-bind:disabled="loginButtonDisabled" class="primary_button" @click="handleLogin">
       <p v-if="loginError" class="validation">Incorrect credentials</p>
-      <p v-if="loggingIn" class="confirmation">Successfully logged in</p>
+      <p v-if="loggingIn" class="confirmation">Correct credentials</p>
       <Loader v-if="loading"/>
     </form>
   </div>
@@ -23,6 +23,7 @@
   import { useAuthStore } from '../stores/authStore.js'
   import axios from 'axios'
   import Loader from './Loader.vue';
+  import { toast } from "vue3-toastify";
 
   export default {
     name: 'LoginForm',
@@ -74,6 +75,10 @@
           useAuthStore().logIn(user)
           this.loggingIn = true
           this.loading = true
+          toast.success("Logging in...", {
+            timeout: 2000,
+            position: "top-center",
+          });
           setTimeout(() => {
             this.$router.push({name: "root-home"});
           }, 2000);

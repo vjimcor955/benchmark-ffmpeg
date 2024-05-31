@@ -91,7 +91,6 @@
       async runCommandTest(e) {
         e.preventDefault()
 
-        // TODO: Implement backwards counter using speed processing in the Loader component
         // stopwatch since button is pressed
         const startTime = Date.now();
         this.stopwatchInterval = setInterval(() => {
@@ -175,7 +174,6 @@
         }
       },
       handleCommand(command) {
-        // const regex = /([&|][&|]|;(?=(?:[^"]*"[^"]*")*[^"]*$))|(\${[^{}]*})/;
         const regexAmpersand = /&&/;
         const regexPipe = /\|\|/;
         const regexSemicolon = /;/;
@@ -202,6 +200,7 @@
       showToast(message) {
         toast.error(message, {
           duration: 2000,
+          position: "top-center"
         });
       },
       deleteField(e) {

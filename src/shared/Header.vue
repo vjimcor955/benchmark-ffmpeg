@@ -33,7 +33,8 @@
     methods: {
       handleLogout() {
         toast.info("Logging out...", {
-          timeout: 2000       
+          timeout: 2000,
+          position: "top-center",   
         });
         setTimeout(() => {
           useAuthStore().logOut()
