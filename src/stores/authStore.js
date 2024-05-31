@@ -34,9 +34,6 @@ export const useAuthStore = defineStore('authStore', {
         token: ''
       }
       this.isLogged = false
-    },
-    updateUserRanking(ranking) {
-      this.user.ranking = ranking
     }
   },
   persist: {
