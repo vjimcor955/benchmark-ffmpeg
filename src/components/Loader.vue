@@ -19,8 +19,9 @@
 
 <style lang="scss">
   .loading {
-    height: 75px;
-    width: 75px;
+    height: 100px;
+    width: 100px;
+    padding: 10px 50px;
     display: flex;
     justify-content: center;
     align-items: center;
