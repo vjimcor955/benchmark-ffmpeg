@@ -59,4 +59,28 @@
       @include link($accent_color);
     }
   }
+
+  @media (max-width: 768px) {
+    .loginView {
+      gap: 50px;
+
+      .form {
+        width: 90%;
+        padding: 20px;
+        gap: 20px;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .loginView {
+      gap: 30px;
+
+      .form {
+        width: 85%;
+        padding: 20px;
+        gap: 15px;
+      }
+    }
+  }
 </style>

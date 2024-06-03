@@ -154,7 +154,27 @@
         padding: 10px;
         border-radius: 5px;
         font-size: 0.9em;
-        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .login {
+      &__form {
+        width: 90%;
+        padding: 10px;
+        gap: 20px;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .login {
+      &__form {
+        width: 100%;
+        padding: 5px;
+        gap: 15px;
+      }
     }
   }
 </style>
