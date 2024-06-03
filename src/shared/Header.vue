@@ -111,7 +111,7 @@ export default {
     color: #fff;
     cursor: pointer;
 
-    @media (max-width: 768px) {
+    @media (max-width: 1200px) {
       display: block;
     }
   }
@@ -120,7 +120,7 @@ export default {
   @include link__button($color: #fff);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .header {
     padding: 0px 1rem;
     flex-wrap: wrap;
