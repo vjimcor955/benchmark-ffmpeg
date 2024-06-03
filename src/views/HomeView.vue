@@ -63,4 +63,29 @@
       height: 300px;
     }
   }
+
+  @media (max-width: 768px) {
+    .home {
+      flex-direction: column;
+      gap: 20px;
+
+      .home__content {
+        width: 80%;
+        gap: 20px;
+
+        &--title {
+          font-size: 1.5rem;
+        }
+
+        &--message {
+          font-size: 1rem;
+        }
+      }
+
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
 </style>
