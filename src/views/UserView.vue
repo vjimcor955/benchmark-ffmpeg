@@ -20,84 +20,155 @@
         </div>
       </div>
     </div>
-</div>
+  </div>
 </template>
 
-
 <script>
-  import { useAuthStore } from '../stores/authStore.js';
+import { useAuthStore } from '../stores/authStore.js';
 
-  export default {
-    data() {
-      return {
-        user: {
-          name: useAuthStore().user.name,
-          user: useAuthStore().user.user,
-          email: useAuthStore().user.email
+export default {
+  data() {
+    return {
+      user: {
+        name: useAuthStore().user.name,
+        user: useAuthStore().user.user,
+        email: useAuthStore().user.email
+      }
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+@import "../assets/sass/main.scss";
+
+.user {
+  min-height: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  justify-content: center;
+  align-items: center;
+
+  &__info {
+    width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border: 3px solid $accent-color;
+    padding: 1rem;
+    border-radius: 15px;
+    padding: 100px 0px;
+
+    &--img {
+      width: 50%;
+      text-align: center;
+      padding-left: 5%;
+    }
+
+    &--data {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      gap: 5rem;
+
+      &__field {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 3rem;
+
+        #label {
+          font-size: 1.3rem;
+          font-weight: bold;
+          font-family: Orbitron;
+        }
+
+        #field {
+          font-size: 1.2rem;
         }
       }
     }
   }
-</script>
 
+  .title {
+    font-size: 1.9rem;
+    font-weight: bold;
+    font-family: Orbitron;
+  }
+}
 
-<style lang="scss">
-  @import "../assets/sass/main.scss";
-
+@media (max-width: 1200px) {
   .user {
-    min-height: inherit;
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-    justify-content: center;
-    align-items: center;
+    gap: 2rem;
 
     &__info {
-      width: 50%;
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-      border: 3px solid $accent-color;
-      padding: 1rem;
-      border-radius: 15px;
-      padding: 100px 0px;
+      width: 75%;
+      gap: 2rem;
+      flex-direction: column;
+      padding: 50px 0px;
 
       &--img {
-        width: 50%;
-        text-align: center;
-        padding-left: 5%;
+        width: 100%;
+        padding-left: 0px;
+
+        img {
+          height: 10rem;
+        }
+      }
+      
+      &--data {
+        width: 100%;
+        align-items: center;
       }
 
       &--data {
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        gap: 5rem;
+        gap: 2rem;
+      }
+    }
+
+    .title {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .user {
+    gap: 1.5rem;
+
+    &__info {
+      padding: 20px;
+
+      &--img {
+        width: 100%;  
+        padding-left: 0px;
+
+        img {
+          height: 7rem;
+        }
+      }
+
+      &--data {
+        gap: 1.5rem;
 
         &__field {
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-          gap: 3rem;
+          gap: 1rem;
 
           #label {
-            font-size: 1.3rem;
-            font-weight: bold;
-            font-family: Orbitron;
+            font-size: 1rem;
           }
 
           #field {
-            font-size: 1.2rem;
-
+            font-size: 0.9rem;
           }
         }
       }
     }
 
     .title {
-        font-size: 1.9rem;
-        font-weight: bold;
-        font-family: Orbitron;
-      }
+      font-size: 1.5rem;
+    }
   }
+}
 </style>
