@@ -110,6 +110,7 @@ export default {
     font-size: 2rem;
     color: #fff;
     cursor: pointer;
+    padding-right: 25px;
 
     @media (max-width: 1200px) {
       display: block;
@@ -126,7 +127,7 @@ export default {
     flex-wrap: wrap;
 
     &__title {
-      font-size: 1.5rem;
+      font-size: 1.2rem;
     }
 
     &__navbar {
