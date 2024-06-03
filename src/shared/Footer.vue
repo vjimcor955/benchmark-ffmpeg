@@ -56,4 +56,27 @@
       }
     }
   }
+
+  @media screen and (max-width: 900px) {
+    .footer {
+      height: auto;
+      flex-direction: column;
+      gap: 20px;
+      padding: 2rem;
+
+      &__signature {
+        font-size: 1rem;
+        text-align: center;
+      }
+
+      &__socials {
+        gap: 2rem;
+        justify-content: center;
+
+        &--github {
+          gap: 0.5rem;
+        }
+      }
+    }
+  }
 </style>
