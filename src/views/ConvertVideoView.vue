@@ -22,11 +22,10 @@
   </div>
 </template>
 
-
 <script>
   import CodecsForm from '../components/CodecsForm.vue';
   import CommandForm from '../components/CommandForm.vue';
-  
+
   export default {
     name: 'ConvertVideoView',
     data() {
@@ -68,7 +67,6 @@
     }
   }
 </script>
-
 
 <style lang="scss">
   @import "../assets/sass/main.scss";
@@ -140,5 +138,80 @@
       margin-bottom: 50px;
     } 
   }
-  
+
+  @media (max-width: 1200px) {
+    .convertVideo {
+      gap: 30px;
+
+      .video_field {
+        gap: 15px;
+        margin-top: 50px;
+
+        .custum-file-upload {
+          width: 80%;
+          padding: 1rem;
+          gap: 15px;
+        }
+
+        .custum-file-upload .icon svg {
+          height: 30px;
+        }
+
+        .custum-file-upload .text span {
+          font-size: 0.9rem;
+        }
+      }
+
+      .navbar {
+        flex-direction: column;
+        gap: 10px;
+
+        &__button {
+          width: 100%;
+          text-align: center;
+        }
+      }
+
+      .selected_form {
+        width: 90%;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .convertVideo {
+      gap: 20px;
+
+      .video_field {
+        gap: 10px;
+        margin-top: 40px;
+
+        .custum-file-upload {
+          width: 100%;
+          padding: 0.8rem;
+          gap: 10px;
+        }
+
+        .custum-file-upload .icon svg {
+          height: 25px;
+        }
+
+        .custum-file-upload .text span {
+          font-size: 0.8rem;
+        }
+      }
+
+      .navbar {
+        gap: 5px;
+
+        &__button {
+          padding: 8px 16px;
+        }
+      }
+
+      .selected_form {
+        width: 95%;
+      }
+    }
+  }
 </style>

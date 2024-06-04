@@ -36,6 +36,7 @@
 <script>
   import axios from 'axios'
   import { useVideoStore } from '../stores/videoStore.js'
+  import { useAuthStore } from '../stores/authStore.js'
   import Loader from '../components/Loader.vue';
 
   export default {
@@ -123,12 +124,30 @@
        * @returns {Promise<void>} - A promise that resolves when the request is completed.
        */
       async codecTest(codec) {
-        const formData = new FormData()
-        formData.append('video', this.video)
+        const uploadVideo = new FormData()
+        uploadVideo.append('name', this.video.name)
+        uploadVideo.append('size', this.video.size)
+        uploadVideo.append('type', this.video.type)
+        uploadVideo.append('user_id', useAuthStore().user.id)
         try {
-          const response = await axios.post('http://localhost:3000/codecs', formData, {
+          const response = await axios.post('http://localhost:3000/api/uploadVideo/upload', uploadVideo, {
+            headers: {
+              ContentType: 'multipart/form-data',
+              Authorization: `Bearer ${useAuthStore().user.token}`
+            }
+          })
+        } catch (error) {
+          console.error("ERROR: ", error)
+        }
+
+        const processVideo = new FormData()
+        processVideo.append('video', this.video)
+        try {
+          // const response = await axios.post('http://localhost:3000/api/resultVideo/codec', processVideo, {
+          const response = await axios.post('http://localhost:3000/codecs', processVideo, {
             headers: {
               'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${useAuthStore().user.token}`,
               'codec': codec,
               'input': this.video.name
             }
@@ -220,6 +239,64 @@
 
       @include link(#000);
       @include primary-button($accent_color);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .codec {
+      &__form {
+        width: 100%;
+        padding: 20px;
+        gap: 30px;
+
+        &--fields {
+          width: 95%;
+          gap: 15px;
+
+          &--input {
+            gap: 10px;
+
+            label {
+              font-size: 1rem;
+            }
+
+            input[type="text"] {
+              width: 80%;
+              font-size: 1rem;
+              padding: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .codec {
+      &__form {
+        width: 100%;
+        padding: 15px;
+        gap: 20px;
+
+        &--fields {
+          width: 95%;
+          gap: 10px;
+
+          &--input {
+            gap: 8px;
+
+            label {
+              font-size: 0.9rem;
+            }
+
+            input[type="text"] {
+              width: 80%;
+              font-size: 0.9rem;
+              padding: 6px;
+            }
+          }
+        }
+      }
     }
   }
 </style>

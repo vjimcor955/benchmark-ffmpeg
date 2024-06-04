@@ -310,5 +310,63 @@
       }
     }
   }
+
+  @media (max-width: 1200px) {
+    .command {
+      &__form {
+        width: 100%;
+        padding: 20px;
+        gap: 30px;
+
+        &--fields {
+          width: 95%;
+          gap: 15px;
+
+          &--input {
+            gap: 10px;
+
+            label {
+              font-size: 1rem;
+            }
+
+            input[type="text"] {
+              width: 80%;
+              font-size: 1rem;
+              padding: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .command {
+      &__form {
+        width: 100%;
+        padding: 15px;
+        gap: 20px;
+
+        &--fields {
+          width: 95%;
+          gap: 10px;
+
+          &--input {
+            gap: 8px;
+
+            label {
+              font-size: 0.9rem;
+            }
+
+            input[type="text"] {
+              width: 80%;
+              font-size: 0.9rem;
+              padding: 6px;
+            }
+          }
+        }
+      }
+    }
+  }
   
 </style>
