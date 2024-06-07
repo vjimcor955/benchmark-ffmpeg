@@ -76,7 +76,7 @@
           this.loggingIn = true
           this.loading = true
           toast.success("Logging in...", {
-            timeout: 2000,
+            autoClose: 1500,
             position: "top-center",
           });
           setTimeout(() => {

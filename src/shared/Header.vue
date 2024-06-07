@@ -40,7 +40,7 @@ export default {
   methods: {
     handleLogout() {
       toast.info("Logging out...", {
-        timeout: 2000,
+        autoClose: 1500,
         position: "top-center",
       });
       setTimeout(() => {

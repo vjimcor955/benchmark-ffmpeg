@@ -119,7 +119,7 @@
           this.registered = true
           this.loading = true
           toast.success("Successfully registered", {
-            timeout: 2000,
+            autoClose: 1500,
             position: "top-center"
           });
           setTimeout(() => {
