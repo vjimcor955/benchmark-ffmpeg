@@ -8,35 +8,68 @@
       <div class="user__info--data">
         <div class="user__info--data__field">
           <p id="label">Name:</p>
-          <p id="field">{{ user.name }}</p>
+          <input id="field" v-model="user.name" type="text" >
         </div>
         <div class="user__info--data__field">
           <p id="label">User:</p>
-          <p id="field">{{ user.user }}</p>
+          <input id="field" v-model="user.user" type="text">
         </div>
         <div class="user__info--data__field">
           <p id="label">Email:</p>
-          <p id="field">{{ user.email }}</p>
+          <input id="field" v-model="user.email" type="text">
         </div>
       </div>
     </div>
+    <button class="primary_button" @click="handleUserInfo">Modify user data</button>
   </div>
 </template>
 
 <script>
-import { useAuthStore } from '../stores/authStore.js';
+  import { useAuthStore } from '../stores/authStore.js';
+  import axios from 'axios';
+  import { toast } from "vue3-toastify";
 
-export default {
-  data() {
-    return {
-      user: {
-        name: useAuthStore().user.name,
-        user: useAuthStore().user.user,
-        email: useAuthStore().user.email
+  export default {
+    name: 'UserView',
+    data() {
+      return {
+        user: {
+          id: useAuthStore().user.id,
+          name: useAuthStore().user.name,
+          user: useAuthStore().user.user,
+          email: useAuthStore().user.email
+        }
+      }
+    },
+    methods: {
+      // Update user info
+      handleUserInfo() {
+        const updatedUser = {
+          name: this.user.name,
+          user: this.user.user,
+          email: this.user.email
+        }
+        try {
+          const response = axios.put(`http://localhost:3000/api/user/${this.user.id}`, updatedUser, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${useAuthStore().user.token}`,
+            }
+          })
+          useAuthStore().user.name = this.user.name;
+          useAuthStore().user.user = this.user.user;
+          useAuthStore().user.email = this.user.email;
+          toast.success("User data successfully modified!", {
+            autoClose: 1500,
+            position: "top-center"
+          });          
+        return response.data
+        } catch (error) {
+          console.error(error);
+        }
       }
     }
   }
-}
 </script>
 
 <style lang="scss">
@@ -85,7 +118,11 @@ export default {
         }
 
         #field {
-          font-size: 1.2rem;
+          font-size: 1rem;
+          border: 2px solid $accent-color;
+          border-radius: 10px;
+          padding: 0.5rem;
+          width: 50%;
         }
       }
     }
@@ -96,6 +133,8 @@ export default {
     font-weight: bold;
     font-family: Orbitron;
   }
+
+  @include primary_button($accent-color);
 }
 
 @media (max-width: 1200px) {
