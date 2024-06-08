@@ -36,9 +36,9 @@
 <script>
   import axios from 'axios'
   import { useVideoStore } from '../stores/videoStore.js'
+  import { useAuthStore } from '../stores/authStore.js'
   import Loader from '../components/Loader.vue';
   import { toast } from "vue3-toastify";
-
 
   export default {
     name: 'CommandsForm',
@@ -54,6 +54,10 @@
         loading: false,
         stopwatchInterval: null,
         stopwatchTime: '00:00:00',
+        resultVideo: {
+          sourceVideoPath: '',
+          outputName: '',
+        }
       }
     },
     components: {
@@ -100,9 +104,11 @@
           const hours = Math.floor((elapsedTime / 1000 / 60 / 60) % 24).toString().padStart(2, '0');
           this.stopwatchTime = `${hours}:${minutes}:${seconds}`;
         }, 1000);
-        // 
         
         let hasInvalidCommand = false;
+
+        // Upload video
+        await this.uploadVideo()
 
         const allCommand = [this.command1, this.command2, this.command3]
         const promises = allCommand.map(command => {
@@ -126,10 +132,7 @@
           this.loading = true
 
           Promise.all(promises).then(() => {
-            // TODO: remove timer when implementing backward timer in Loader component
             clearInterval(this.stopwatchInterval)
-            //
-
             this.stopwatchTime = 'Loading results...'
             setTimeout(() => {
               // Redirect to results page
@@ -138,32 +141,77 @@
           })
         }
       },
+      async uploadVideo() {
+        const uploadVideo = {
+          video: this.video,
+          name: this.video.name,
+          size: this.video.size,
+          type: this.video.type,
+          user_id: useAuthStore().user.id
+        }
+        try {
+          const response = await axios.post('https://ffmpeg-benckmark-api-646aff7ac349.herokuapp.com/api/upload/video', uploadVideo, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${useAuthStore().user.token}`
+            }
+          })
+          useVideoStore().setVideoId(response.data.id)
+          return response.data
+        } catch (error) {
+          console.error("ERROR: ", error)
+        }
+      },
       /**
-       * Executes the test by sending a video file and a command to the server.
-       * @param {string} command - The command to be executed on the server.
-       * @returns {Promise<void>} - A promise that resolves when the command test is completed.
+       * Sends a POST request to test a codec with the provided video file.
+       * @param {string} codec - The codec to test.
+       * @returns {Promise<void>} - A promise that resolves when the request is completed.
        */
       async commandTest(command) {
+        const resultVideo = await this.ffmpegCommand(command)
+        const metrics = await this.getMetrics(resultVideo)
+        console.log(`--- METRICS (${command}): `, metrics)
+        return metrics
+      },
+      async ffmpegCommand(command) {
         const commandSplit = command.split(' ')
         const outputName = commandSplit[commandSplit.length - 1]
-
         commandSplit.pop(outputName)
-        command = commandSplit.join(' ')
+        const commandJoin = commandSplit.join(' ')
 
-        const formData = new FormData()
-        formData.append('video', this.video)
+        const processVideo = new FormData()
+        processVideo.append('video', this.video)
         try {
-          const response = await axios.post('http://localhost:3000/command', formData, {
+          const response = await axios.post('http://localhost:3030/commands', processVideo, {
             headers: {
               'Content-Type': 'multipart/form-data',
-              'command': command,
+              Authorization: `Bearer ${useAuthStore().user.token}`,
+              'command': commandJoin,
               'input': this.video.name,
               'output': outputName
             }
           })
-          return response.data
+          const resultVideo = {
+            sourceVideoPath: response.data.sourceVideoPath,
+            outputName: response.data.outputName,
+            codec: command
+          }
+          return resultVideo
         } catch (error) {
           console.error("ERROR: ", error)
+        }
+      },
+      async getMetrics(resultVideo) {
+        try {
+          const response = await axios.post('http://localhost:3030/metrics', resultVideo, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${useAuthStore().user.token}`
+            }
+          });
+          return response.data;
+        } catch (error) {
+          console.error("ERROR: ", error);
         }
       },
       handleButton() {
@@ -199,7 +247,7 @@
       },
       showToast(message) {
         toast.error(message, {
-          duration: 2000,
+          autoClose: 2000,
           position: "top-center"
         });
       },
