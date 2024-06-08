@@ -6,7 +6,7 @@
       <RouterLink :to="{name: 'login'}" class="primary_button" v-if="!isLogged">Sign in</RouterLink>
       <RouterLink :to="{name: 'convert-video'}" class="primary_button" v-else>Convert video</RouterLink>
     </div>
-    <img src="../assets/1920x1080.svg" alt="Imagen home">
+    <img src="../assets/video-editing.webp" alt="Imagen home">
 </div>
 </template>
 
@@ -60,7 +60,8 @@
 
     img {
       width: auto;
-      height: 300px;
+      height: 350px;
+      @include box-gradient($details_color);
     }
   }
 
