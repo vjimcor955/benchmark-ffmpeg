@@ -7,7 +7,7 @@
         <a v-if="codecs >= 2" @click="codecSelector" class="navbar__button">Codec 2</a>
         <a v-if="codecs == 3" @click="codecSelector" class="navbar__button">Codec 3</a>
       </div>
-      <RouterLink :to="{name: 'video-player'}" class="results__header--router_link secondary_button">Compare videos</RouterLink>
+      <RouterLink :to="{name: 'video-player'}" class="results__header--router_link secondary_button" v-if="showButton">Compare videos</RouterLink>
     </div>
     <!-- info about the codec -->
     <div class="data_codec">
@@ -30,79 +30,86 @@
 
 
 <script>
-import useVideoStore from '../stores/videoStore.js'
-import GeneralTable from '../components/GeneralTable.vue'
-import MetricsCharts from '../components/MetricsCharts.vue'
+  import GeneralTable from '../components/GeneralTable.vue'
+  import MetricsCharts from '../components/MetricsCharts.vue'
+  import axios from 'axios'
+  import { useVideoStore } from '../stores/videoStore.js'
+  import { useAuthStore } from '../stores/authStore.js'
 
-export default {
-  name: 'ResultsView',
-  data() {
-    return {
-      results: useVideoStore().resultsList,
-      codecs: 0,
-      codecSelected: 0,
-    }
-  },
-  components: {
-    GeneralTable,
-    MetricsCharts
-  },
-  created() {
-    this.displayNavBar()
-    // this.uploadResults(results)
-  },
-  methods: {
-    /**
-    * Displays the navigation bar buttons.
-    * Increments the 'codecs' count for each codec in the 'results' array.
-    */
-    displayNavBar() {
-      this.results.forEach(codec => {
-        this.codecs++
-      })
-    },
-    /**
-    * Handles the selection of a codec.
-    * @param {Event} e - The event object representing the click event.
-    */
-    codecSelector(e) {
-      // Link is disabled after being clicked
-      if (e.target.classList.contains('selected')) {
-        return;
-      }
-      for (let i = 0; i < e.target.parentNode.children.length; i++) {
-        e.target.parentNode.children[i].classList.remove('selected');
-      }
-      e.target.classList.add('selected');
-      for (let i = 0; i < e.target.parentNode.children.length; i++) {
-        if (e.target.parentNode.children[i].classList.contains('selected')) {
-          this.codecSelected = i
-        }
+  export default {
+    name: 'ResultsView',
+    data() {
+      return {
+        results: useVideoStore().resultsList,
+        codecs: 0,
+        codecSelected: 0,
+        showButton: false
       }
     },
-    async uploadResults() {
-      for (result in results) {
-        const resultVideo = {
-          name: result.name,
-          size: result.size,
-          codec: result.codec,
-          videoId: useVideoStore().videoId
+    components: {
+      GeneralTable,
+      MetricsCharts
+    },
+    created() {
+      this.displayNavBar()
+      this.handleButton()
+      this.uploadResults(this.results)
+    },
+    methods: {
+      /**
+      * Displays the navigation bar buttons.
+      * Increments the 'codecs' count for each codec in the 'results' array.
+      */
+      displayNavBar() {
+        this.results.forEach(codec => {
+          this.codecs++
+        })
+      },
+      handleButton() {
+        if (this.codecs > 1) {
+          this.showButton = true
         }
-        try {
-          const response = await axios.post('http://localhost:3000/api/result/video', resultVideo, {
+      },
+      /**
+      * Handles the selection of a codec.
+      * @param {Event} e - The event object representing the click event.
+      */
+      codecSelector(e) {
+        // Link is disabled after being clicked
+        if (e.target.classList.contains('selected')) {
+          return;
+        }
+        for (let i = 0; i < e.target.parentNode.children.length; i++) {
+          e.target.parentNode.children[i].classList.remove('selected');
+        }
+        e.target.classList.add('selected');
+        for (let i = 0; i < e.target.parentNode.children.length; i++) {
+          if (e.target.parentNode.children[i].classList.contains('selected')) {
+            this.codecSelected = i
+          }
+        }
+      },
+      async uploadResults(results) {
+        const promises = results.map(result => {
+          const resultVideo = {
+            name: result.filename,
+            size: result.size,
+            codec: result.codec,
+            videoId: useVideoStore().videoId
+          }
+          return axios.post('https://ffmpeg-benckmark-api-646aff7ac349.herokuapp.com/api/result/video', resultVideo, {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${useAuthStore().user.token}`
             }
-          })
-          return response.data
-        } catch (error) {
-          console.error("ERROR: ", error)
-        }
+          }).then(response => response.data)
+            .catch(error => console.error("ERROR: ", error))
+        })
+        const responses = await Promise.all(promises)
+        return responses
       }
-    }
-  },
-}
+    },
+  }
 </script>
 
 
