@@ -35,13 +35,10 @@
     },
     mounted() {
       this.loadVideoPlayer('https://vivictorg.github.io/vivict/');
-      // this.fillVideosList();
-      console.log(this.videosList)
     },
     methods: {
       handleVideoPlayerUrl() {
-        console.log('----- LEFT', this.leftVideo, 'RIGHT', this.rightVideo)
-        const playerUrl = `https://vivictorg.github.io/vivict/?leftVideoUrl=http://localhost:3000/${this.leftVideo}&rightVideoUrl=http://localhost:3000/${this.rightVideo}`;
+        const playerUrl = `https://vivictorg.github.io/vivict/?leftVideoUrl=http://localhost:3030/${this.leftVideo}&rightVideoUrl=http://localhost:3030/${this.rightVideo}`;
         if (this.leftVideo === 'placeholder' || this.rightVideo === 'placeholder') {
           this.loadVideoPlayer('https://vivictorg.github.io/vivict/');
         } else {
@@ -52,13 +49,6 @@
         // Set the source of the iframe to the player URL
         this.$refs.videoPlayerFrame.src = url;  
       },
-      // fillVideosList() {
-      //   console.log("fillVideosList")
-      //   // Recicibir los videos en el promp y añadirlos a la lista de videos para sacarlos por los selects (controlar tambien que no se repitan en los selects)
-      //   results.forEach(video => {
-      //     this.videosList.push(video.filename);
-      //   });
-      // }
     }
   };
 </script>
