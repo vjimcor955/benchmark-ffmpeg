@@ -61,7 +61,7 @@
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1100px) {
     .footer {
       height: auto;
       flex-direction: column;
@@ -76,6 +76,21 @@
       &__socials {
         gap: 2rem;
         justify-content: center;
+
+        &--github {
+          gap: 0.5rem;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer {
+      &__socials {
+        flex-direction: column;
+        gap: 2rem;
+        justify-content: center;
+        align-content: center;
 
         &--github {
           gap: 0.5rem;
