@@ -6,6 +6,10 @@
         <img src="../assets/github_icon.svg" alt="Github icon" class="socials__github--img">
         <a class="socials__github link" href="https://github.com/vjimcor955" target=”_blank”>GitHub</a>
       </div>
+      <div class="footer__socials--github">
+        <img src="../assets/github_icon.svg" alt="Github icon" class="socials__github--img">
+        <a class="socials__github link" href="https://github.com/vjimcor955/benchmark_ffmpeg-video_processor.git" target=”_blank”>Needed repo to make the app work!</a>
+      </div>
     </div>
   </footer>
 </template>
@@ -24,7 +28,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10%;
+    gap: 50px;
     padding: 0px 10rem;
     background-color: $accent_color;
     color: #fff;
@@ -40,7 +44,7 @@
 
     &__socials {
       display: flex;
-      gap: 5rem;
+      gap: 50px;
 
       &--github {
         display: flex;
