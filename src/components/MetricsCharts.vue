@@ -83,7 +83,7 @@
         this.vmafData.push(vmafHeader)
 
         const framesLength = data[0].quality_metrics.psnr.length
-        for (let i = 0; i < framesLength; i += 10) {
+        for (let i = 0; i < framesLength-10; i += 10) {
           const psnrRow = [i]
           const ssimRow = [i]
           const vmafRow = [i]
