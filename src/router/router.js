@@ -34,9 +34,10 @@ const routes = [
         component: () => import('../views/ConvertVideoView.vue') 
       },
       { 
-        path: '/results', 
+        path: '/results/:upload', 
         name: 'results',
-        component: () => import('../views/ResultsView.vue') 
+        component: () => import('../views/ResultsView.vue'),
+        props: route => ({ upload: route.params.upload })
       },
       { 
         path: '/video-player', 

@@ -1,8 +1,7 @@
 <template>
   <div class="videoPlayer">
     <div class="videoPlayer__header">
-      <RouterLink :to="{name: 'results'}" class="videoPlayer__header--router_link secondary_button">Return to Results</RouterLink>
-      <div class="navbar">
+      <RouterLink :to="{ name: 'results', params: { upload: false } }" class="videoPlayer__header--router_link secondary_button">Return to Results</RouterLink>      <div class="navbar">
         <select v-model="leftVideo" name="leftVideo" id="leftVideo" class="navbar__select">
           <option value="placeholder" selected>Left video</option>
           <option v-for="video in videosList" :key="video" :value="video.filename">{{ video.filename }}</option>

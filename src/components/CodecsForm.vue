@@ -121,7 +121,7 @@
           this.stopwatchTime = 'Loading results...'
           setTimeout(() => {
             // Redirect to results page
-            this.$router.push({ name: 'results' })
+            this.$router.push({ name: 'results', params: { upload: true } })
           }, 2000)
         })
       },

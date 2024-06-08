@@ -50,10 +50,16 @@
       GeneralTable,
       MetricsCharts
     },
+    props: {
+      upload: {
+        type: String,
+        default: false
+      }
+    },
     created() {
       this.displayNavBar()
       this.handleButton()
-      this.uploadResults(this.results)
+      this.handleUploadResults(this.upload)
     },
     methods: {
       /**
@@ -68,6 +74,11 @@
       handleButton() {
         if (this.codecs > 1) {
           this.showButton = true
+        }
+      },
+      handleUploadResults(upload) {
+        if (upload === 'true') {
+          this.uploadResults(this.results)
         }
       },
       /**
@@ -90,23 +101,24 @@
         }
       },
       async uploadResults(results) {
-        const promises = results.map(result => {
-          const resultVideo = {
-            name: result.filename,
-            size: result.size,
-            codec: result.codec,
-            videoId: useVideoStore().videoId
-          }
-          return axios.post('https://ffmpeg-benckmark-api-646aff7ac349.herokuapp.com/api/result/video', resultVideo, {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${useAuthStore().user.token}`
-            }
-          }).then(response => response.data)
-            .catch(error => console.error("ERROR: ", error))
-        })
-        const responses = await Promise.all(promises)
-        return responses
+        console.log('UPLOAD')
+        // const promises = results.map(result => {
+        //   const resultVideo = {
+        //     name: result.filename,
+        //     size: result.size,
+        //     codec: result.codec,
+        //     videoId: useVideoStore().videoId
+        //   }
+        //   return axios.post('https://ffmpeg-benckmark-api-646aff7ac349.herokuapp.com/api/result/video', resultVideo, {
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //       Authorization: `Bearer ${useAuthStore().user.token}`
+        //     }
+        //   }).then(response => response.data)
+        //     .catch(error => console.error("ERROR: ", error))
+        // })
+        // const responses = await Promise.all(promises)
+        // return responses
       }
     },
   }
