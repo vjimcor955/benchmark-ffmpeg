@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <button class="primary_button" @click="handleUserInfo">Modify user data</button>
+    <button class="primary_button" @click="handleUserInfo" :disabled="buttonDisabled">Modify user data</button>
   </div>
 </template>
 
@@ -38,10 +38,29 @@
           name: useAuthStore().user.name,
           user: useAuthStore().user.user,
           email: useAuthStore().user.email
-        }
+        },
+        buttonDisabled: true
+      }
+    },
+    watch: {
+      'user.name': function(newVal, oldVal) {
+        this.handleButton();
+      },
+      'user.user': function(newVal, oldVal) {
+        this.handleButton();
+      },
+      'user.email': function(newVal, oldVal) {
+        this.handleButton();
       }
     },
     methods: {
+      handleButton() {
+        if (this.user.name !== useAuthStore().user.name || this.user.user !== useAuthStore().user.user || this.user.email !== useAuthStore().user.email) {
+          this.buttonDisabled = false;
+        } else {
+          this.buttonDisabled = true;
+        }
+      },
       // Update user info
       handleUserInfo() {
         const updatedUser = {
