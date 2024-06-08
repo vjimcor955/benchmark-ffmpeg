@@ -50,7 +50,7 @@
           email: this.user.email
         }
         try {
-          const response = axios.put(`http://localhost:3000/api/user/${this.user.id}`, updatedUser, {
+          const response = axios.put(`https://ffmpeg-benckmark-api-646aff7ac349.herokuapp.com/api/user/${this.user.id}`, updatedUser, {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${useAuthStore().user.token}`,

@@ -114,7 +114,7 @@
       async handleRegister(e) {
         e.preventDefault()
         try {
-          const response = await axios.post('http://localhost:3000/api/user/register', this.registerData);
+          const response = await axios.post('https://ffmpeg-benckmark-api-646aff7ac349.herokuapp.com/api/user/register', this.registerData);
           if (response.data.message === 'Email already in use.') return this.emailUsed = true
           this.registered = true
           this.loading = true
