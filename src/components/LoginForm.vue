@@ -100,6 +100,8 @@
   .login {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 35px;
 
     h2 {
@@ -129,10 +131,16 @@
         align-items: left;
         gap: 15px;
 
+        label {
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+
         input {
-          padding: 7px;
-          border: 1px solid #ccc;
-          border-radius: 5px;
+          font-size: 1rem;
+          border: 2px solid $accent-color;
+          border-radius: 10px;
+          padding: 0.5rem;
         }
       }
 
@@ -160,20 +168,41 @@
 
   @media (max-width: 768px) {
     .login {
+      width: 50%;
+      padding: 0px 20px;
+
       &__form {
-        width: 90%;
-        padding: 10px;
         gap: 20px;
+
+        &--field {
+          gap: 15px;
+
+          label {
+            font-size: 1.1rem;
+          }
+        }
       }
     }
   }
 
+
   @media (max-width: 480px) {
     .login {
+      width: 100%;
+      padding: 0px 20px;
+
       &__form {
         width: 100%;
         padding: 5px;
         gap: 15px;
+
+        &--field {
+          gap: 15px;
+
+          label {
+            font-size: 1.1rem;
+          }
+        }
       }
     }
   }
