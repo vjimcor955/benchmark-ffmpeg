@@ -52,6 +52,10 @@
         loading: false,
         stopwatchInterval: null,
         stopwatchTime: '00:00:00',
+        resultVideo: {
+          sourceVideoPath: '',
+          outputName: '',
+        }
       }
     },
     components: {
@@ -99,6 +103,9 @@
           this.stopwatchTime = `${hours}:${minutes}:${seconds}`;
         }, 1000);
 
+        // Upload video
+        await this.uploadVideo()
+
         const allCodecs = [this.codec1, this.codec2, this.codec3]
         const promises = allCodecs.map(codec => {
           if (codec != '') {
@@ -118,33 +125,43 @@
           }, 2000)
         })
       },
+      async uploadVideo() {
+        const uploadVideo = {
+          video: this.video,
+          name: this.video.name,
+          size: this.video.size,
+          type: this.video.type,
+          user_id: useAuthStore().user.id
+        }
+        try {
+          const response = await axios.post('https://ffmpeg-benckmark-api-646aff7ac349.herokuapp.com/api/upload/video', uploadVideo, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${useAuthStore().user.token}`
+            }
+          })
+          useVideoStore().setVideoId(response.data.id)
+          return response.data
+        } catch (error) {
+          console.error("ERROR: ", error)
+        }
+      },
       /**
        * Sends a POST request to test a codec with the provided video file.
        * @param {string} codec - The codec to test.
        * @returns {Promise<void>} - A promise that resolves when the request is completed.
        */
       async codecTest(codec) {
-        const uploadVideo = new FormData()
-        uploadVideo.append('name', this.video.name)
-        uploadVideo.append('size', this.video.size)
-        uploadVideo.append('type', this.video.type)
-        uploadVideo.append('user_id', useAuthStore().user.id)
-        try {
-          const response = await axios.post('http://localhost:3000/api/uploadVideo/upload', uploadVideo, {
-            headers: {
-              ContentType: 'multipart/form-data',
-              Authorization: `Bearer ${useAuthStore().user.token}`
-            }
-          })
-        } catch (error) {
-          console.error("ERROR: ", error)
-        }
-
+        const resultVideo = await this.ffmpegCommand(codec)
+        const metrics = await this.getMetrics(resultVideo)
+        console.log(`--- METRICS (${codec}): `, metrics)
+        return metrics
+      },
+      async ffmpegCommand(codec) {
         const processVideo = new FormData()
         processVideo.append('video', this.video)
         try {
-          // const response = await axios.post('http://localhost:3000/api/resultVideo/codec', processVideo, {
-          const response = await axios.post('http://localhost:3000/codecs', processVideo, {
+          const response = await axios.post('http://localhost:3030/codecs', processVideo, {
             headers: {
               'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${useAuthStore().user.token}`,
@@ -152,9 +169,43 @@
               'input': this.video.name
             }
           })
-          return response.data
+          const resultVideo = {
+            sourceVideoPath: response.data.sourceVideoPath,
+            outputName: response.data.outputName,
+            codec: codec
+          }
+          return resultVideo
         } catch (error) {
           console.error("ERROR: ", error)
+        }
+      },
+      async getMetrics(resultVideo) {
+        try {
+          const response = await axios.post('http://localhost:3030/metrics', resultVideo, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${useAuthStore().user.token}`
+            }
+          });
+          return response.data;
+        } catch (error) {
+          console.error("ERROR: ", error);
+        }
+      },
+      async getFileSize(resultVideo) {
+        const body = {
+          outputName: resultVideo.outputName
+        }
+        try {
+          const response = await axios.post('http://localhost:3030/filesize', body, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${useAuthStore().user.token}`
+            }
+          });
+          return response.data;
+        } catch (error) {
+          console.error("ERROR: ", error);
         }
       },
       handleButton() {
