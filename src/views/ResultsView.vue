@@ -49,6 +49,7 @@ export default {
   },
   created() {
     this.displayNavBar()
+    // this.uploadResults(results)
   },
   methods: {
     /**
@@ -79,6 +80,27 @@ export default {
         }
       }
     },
+    async uploadResults() {
+      for (result in results) {
+        const resultVideo = {
+          name: result.name,
+          size: result.size,
+          codec: result.codec,
+          videoId: useVideoStore().videoId
+        }
+        try {
+          const response = await axios.post('http://localhost:3000/api/result/video', resultVideo, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${useAuthStore().user.token}`
+            }
+          })
+          return response.data
+        } catch (error) {
+          console.error("ERROR: ", error)
+        }
+      }
+    }
   },
 }
 </script>
@@ -151,7 +173,7 @@ export default {
           
           &__number {
             font-weight: bold;
-            font-size: 1.5em;
+            font-size: 1.4em;
           }
         }
       }
@@ -166,4 +188,95 @@ export default {
     }
   }
 
+  @media (max-width: 1400px) {
+    .results {
+      
+      &__header {
+        width: 90vw;
+        flex-direction: column;
+        gap: 20px;
+
+        &--router_link {
+          position: relative;
+          right: auto;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .results {
+      margin: 20px;
+
+      .data_codec {
+        width: 90vw;
+        padding: 20px;
+        gap: 30px;
+
+        &__title {
+          font-size: 1.4rem;
+        }
+
+        &__info {
+          flex-direction: column;
+          width: 100%;
+          gap: 25px;
+
+          &--table, &--size {
+            width: 100%;
+          }
+
+          &--size {
+            gap: 20px;
+          }
+        }
+
+        &__charts {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .results {
+    margin: 50px 20px;
+
+      &__header {
+        width: 100%;
+        flex-direction: column;
+        gap: 20px;
+
+        &--router_link {
+          position: relative;
+          right: auto;
+        }
+      }
+
+      .data_codec {
+        width: 100%;
+        padding: 10px;
+        gap: 20px;
+
+        &__title {
+          font-size: 1.2rem;
+        }
+
+        &__info {
+          flex-direction: column;
+          width: 75%;
+
+          &--table, &--size {
+            width: 100%;
+          }
+        }
+
+        &__charts {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    }
+  }
 </style>
