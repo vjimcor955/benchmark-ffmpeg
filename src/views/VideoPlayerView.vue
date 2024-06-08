@@ -97,4 +97,46 @@
       height: 100vh;
     }
   }
+
+  @media (max-width: 1700px) {
+    .videoPlayer {
+      gap: 20px;
+
+      &__header {
+        flex-direction: column;
+        margin: 5px 20px;
+        gap: 10px;
+
+        &--router_link {
+          position: relative;
+          left: auto;
+          order: 1;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .videoPlayer {
+      gap: 20px;
+      margin-top: 50px;
+
+      &__header {
+        width: 90vw;
+        gap: 25px;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .videoPlayer {
+      gap: 20px;
+      margin-top: 20px;
+
+      &__div {
+        height: 70vh;
+      }
+    }
+  }
 </style>
