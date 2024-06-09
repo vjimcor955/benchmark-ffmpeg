@@ -6,7 +6,7 @@
 > * Frontend
 > * [Backend](https://github.com/vjimcor955/benchmark_ffmpeg-backend)
 
-* Frontend deploy: https://ffmpegbenchmark.netlify.app/#/
+* Frontend deployment: https://ffmpegbenchmark.netlify.app/#/
 
 ## Requirements
 
