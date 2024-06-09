@@ -38,6 +38,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * Method that handles the logout process
+     */
     handleLogout() {
       toast.info("Logging out...", {
         autoClose: 1500,
