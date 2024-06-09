@@ -54,12 +54,20 @@
       }
     },
     methods: {
-      // Method that enables the button if the login fields are not null
+      /**
+       * Method that checks if the login button should be disabled
+       * @returns {boolean} - Returns true if the login button should be disabled
+       * 
+       */
       check_loginButton() {
         if (this.loginData.email && this.loginData.password) return this.loginButtonDisabled = false
         this.loginButtonDisabled = true
       },
-      // Method that handles the login
+      /**
+       * Method that handles the login process
+       * @param {Event} e - Event object
+       * 
+       */
       async handleLogin(e) {
         e.preventDefault()
         try {
