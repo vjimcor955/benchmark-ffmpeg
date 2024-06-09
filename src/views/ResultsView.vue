@@ -71,11 +71,18 @@
           this.codecs++
         })
       },
+      /**
+       * Displays the 'Compare videos' button if there are more than one codec.
+       */
       handleButton() {
         if (this.codecs > 1) {
           this.showButton = true
         }
       },
+      /**
+       * Handles the upload of the results to the API.
+       * @param {String} upload - The upload status.
+       */
       handleUploadResults(upload) {
         if (upload === 'true') {
           this.uploadResults(this.results)
@@ -100,25 +107,29 @@
           }
         }
       },
+      /**
+       * Uploads the results to the API.
+       * @param {Array} results - The results to be uploaded.
+       * @returns {Array} - The responses from the API.
+       */
       async uploadResults(results) {
-        console.log('UPLOAD')
-        // const promises = results.map(result => {
-        //   const resultVideo = {
-        //     name: result.filename,
-        //     size: result.size,
-        //     codec: result.codec,
-        //     videoId: useVideoStore().videoId
-        //   }
-        //   return axios.post('https://ffmpeg-benckmark-api-646aff7ac349.herokuapp.com/api/result/video', resultVideo, {
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //       Authorization: `Bearer ${useAuthStore().user.token}`
-        //     }
-        //   }).then(response => response.data)
-        //     .catch(error => console.error("ERROR: ", error))
-        // })
-        // const responses = await Promise.all(promises)
-        // return responses
+        const promises = results.map(result => {
+          const resultVideo = {
+            name: result.filename,
+            size: result.size,
+            codec: result.codec,
+            videoId: useVideoStore().videoId
+          }
+          return axios.post('https://ffmpeg-benckmark-api-646aff7ac349.herokuapp.com/api/result/video', resultVideo, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${useAuthStore().user.token}`
+            }
+          }).then(response => response.data)
+            .catch(error => console.error("ERROR: ", error))
+        })
+        const responses = await Promise.all(promises)
+        return responses
       }
     },
   }
