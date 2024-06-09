@@ -54,6 +54,10 @@
       }
     },
     methods: {
+      /**
+       * Method that handles the modification of the user data
+       * @returns {Object} - Returns the updated user data
+       */
       handleButton() {
         if (this.user.name !== useAuthStore().user.name || this.user.user !== useAuthStore().user.user || this.user.email !== useAuthStore().user.email) {
           this.buttonDisabled = false;
@@ -61,7 +65,10 @@
           this.buttonDisabled = true;
         }
       },
-      // Update user info
+      /**
+       * Method that handles the modification of the user data
+       * @returns {Object} - Returns the updated user data
+       */
       handleUserInfo() {
         const updatedUser = {
           name: this.user.name,
