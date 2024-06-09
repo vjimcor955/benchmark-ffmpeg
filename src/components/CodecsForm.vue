@@ -125,6 +125,10 @@
           }, 2000)
         })
       },
+      /**
+       * Sends a POST request to upload the video file to the server.
+       * @returns {Promise<void>} - A promise that resolves when the request is completed.
+       */
       async uploadVideo() {
         const uploadVideo = {
           video: this.video,
@@ -147,9 +151,9 @@
         }
       },
       /**
-       * Sends a POST request to test a codec with the provided video file.
+       * Handles the codec tests.
        * @param {string} codec - The codec to test.
-       * @returns {Promise<void>} - A promise that resolves when the request is completed.
+       * @returns {Promise<Object>} - A promise that resolves with the metrics of the codec test.
        */
       async codecTest(codec) {
         const resultVideo = await this.ffmpegCommand(codec)
@@ -157,6 +161,11 @@
         console.log(`--- METRICS (${codec}): `, metrics)
         return metrics
       },
+      /**
+       * Sends a POST request to the server to run the ffmpeg command.
+       * @param {string} codec - The codec to test.
+       * @returns {Promise<Object>} - A promise that resolves with the result video.
+       */
       async ffmpegCommand(codec) {
         const processVideo = new FormData()
         processVideo.append('video', this.video)
@@ -179,6 +188,11 @@
           console.error("ERROR: ", error)
         }
       },
+      /**
+       * Sends a POST request to the server to get the metrics of the result video.
+       * @param {Object} resultVideo - The result video object.
+       * @returns {Promise<Object>} - A promise that resolves with the metrics of the result video.
+       */
       async getMetrics(resultVideo) {
         try {
           const response = await axios.post('http://localhost:3030/metrics', resultVideo, {
@@ -192,22 +206,9 @@
           console.error("ERROR: ", error);
         }
       },
-      async getFileSize(resultVideo) {
-        const body = {
-          outputName: resultVideo.outputName
-        }
-        try {
-          const response = await axios.post('http://localhost:3030/filesize', body, {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${useAuthStore().user.token}`
-            }
-          });
-          return response.data;
-        } catch (error) {
-          console.error("ERROR: ", error);
-        }
-      },
+      /**
+       * Handles the button state.
+       */
       handleButton() {
         if (this.codec1 != '' && this.video != null) {
           this.buttonDisabled = false
@@ -215,6 +216,10 @@
           this.buttonDisabled = true
         }
       },
+      /**
+       * Deletes a codec field.
+       * @param {Event} e - The event object.
+       */
       deleteField(e) {
         if (e.target.id === 'codec2') {
           this.showCodec2 = false
