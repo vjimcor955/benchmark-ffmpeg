@@ -141,6 +141,10 @@
           })
         }
       },
+      /**
+       * Sends a POST request to upload the video file.
+       * @returns {Promise<void>} - A promise that resolves when the request is completed.
+       */
       async uploadVideo() {
         const uploadVideo = {
           video: this.video,
@@ -163,8 +167,8 @@
         }
       },
       /**
-       * Sends a POST request to test a codec with the provided video file.
-       * @param {string} codec - The codec to test.
+       * Handles the command tests.
+       * @param {string} command - The command to test.
        * @returns {Promise<void>} - A promise that resolves when the request is completed.
        */
       async commandTest(command) {
@@ -173,6 +177,11 @@
         console.log(`--- METRICS (${command}): `, metrics)
         return metrics
       },
+      /**
+       * Sends a POST request to run the ffmpeg command.
+       * @param {string} command - The command to run.
+       * @returns {Promise<void>} - A promise that resolves when the request is completed.
+       */
       async ffmpegCommand(command) {
         const commandSplit = command.split(' ')
         const outputName = commandSplit[commandSplit.length - 1]
@@ -201,6 +210,11 @@
           console.error("ERROR: ", error)
         }
       },
+      /**
+       * Sends a POST request to get the metrics of the processed video.
+       * @param {Object} resultVideo - The result video object.
+       * @returns {Promise<void>} - A promise that resolves when the request is completed.
+       */
       async getMetrics(resultVideo) {
         try {
           const response = await axios.post('http://localhost:3030/metrics', resultVideo, {
@@ -214,6 +228,9 @@
           console.error("ERROR: ", error);
         }
       },
+      /**
+       * Handles the button state.
+       */
       handleButton() {
         if (this.command1 != '' && this.video != null) {
           this.buttonDisabled = false
@@ -221,6 +238,11 @@
           this.buttonDisabled = true
         }
       },
+      /**
+       * Validation of commands.
+       * @param {string} command - The command to handle.
+       * @returns {Array} - An array with the result of the command.
+       */
       handleCommand(command) {
         const regexAmpersand = /&&/;
         const regexPipe = /\|\|/;
@@ -245,12 +267,20 @@
         }
         return [true, ""] 
       },
+      /**
+       * Shows a toast message.
+       * @param {string} message - The message to show.
+       */
       showToast(message) {
         toast.error(message, {
           autoClose: 2000,
           position: "top-center"
         });
       },
+      /**
+       * Deletes a field.
+       * @param {Event} e - The event object.
+       */
       deleteField(e) {
         if (e.target.id === 'command2') {
           this.showCommand2 = false
@@ -260,6 +290,9 @@
           this.command3 = ''
         }
       },
+      /**
+       * Handles the video name on the fields.
+       */
       handleVideoName() {
         if (this.video != null) {
           this.inputVideo = this.video.name
