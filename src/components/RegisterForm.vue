@@ -79,7 +79,12 @@
       },     
     },
     methods: {
-      // Function that validates the inputs in the register form
+      /**
+       * Method that validates the input of the user
+       * @param {string} type - Type of input to validate
+       * @param {string} value - Value of the input to validate
+       * @returns {boolean} - Returns true if the input is valid
+       */
       validateInput(type, value) {
         let re;
         switch (type) {
@@ -106,11 +111,18 @@
         }
         return !this[type + 'Error'];
       },
-      // Function that enables the button if the register fields are filled and valid
+      /**
+       * Method that checks if the register button should be disabled
+       * @returns {boolean} - Returns true if the register button should be disabled
+       */
       check_registerButton() {
         if (this.registerData.name && this.registerData.email && this.registerData.user && this.registerData.password && !this.nameError && !this.emailError && !this.userError && !this.passwordError) return this.registerButtonDisabled = false
         this.registerButtonDisabled = true
       },
+      /**
+       * Method that handles the register of a new user
+       * @param {Event} e - Event that triggered the method
+       */
       async handleRegister(e) {
         e.preventDefault()
         try {
