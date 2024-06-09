@@ -1,29 +1,42 @@
-# benchmark-ffmpeg
+# Benchmark FFmpeg - Frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+> [!NOTE]
+> This is one of the 3 repos involved in this project:
+> * [Video Processor](https://github.com/vjimcor955/benchmark_ffmpeg-video_processor.git)
+> * Frontend
+> * [Backend](https://github.com/vjimcor955/benchmark_ffmpeg-backend)
 
-## Recommended IDE Setup
+* Frontend deploy: https://ffmpegbenchmark.netlify.app/#/
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Requirements
 
-## Customize configuration
+  - [Node.js](https://nodejs.org/)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Instalation for development
 
-## Project Setup
+### Verify Node.js Installation:
 
-```sh
-npm install
+&nbsp;&nbsp;&nbsp;&nbsp;First, make sure Node.js is installed on your device with the command:
+```
+node -v
+``` 
+&nbsp;&nbsp;&nbsp;&nbsp;If it is not installed you can install it from the [official Node.js website](https://nodejs.org/).
+
+### Clone the Project Repository:
+
+&nbsp;&nbsp;&nbsp;&nbsp;Clone the video processor repository from GitHub. You can clone it either from the IDE or using git clone:
+```
+git clone https://github.com/vjimcor955/benchmark_ffmpeg-frontend.git
 ```
 
-### Compile and Hot-Reload for Development
+### Build the app and run it:
 
-```sh
-npm run dev
+&nbsp;&nbsp;&nbsp;&nbsp;Finally, access the directory where the repository has been cloned and enter the commands to install all the project's dependencies and to run the app for development:
+```
+npm install // Install the dependencies
+npm run dev // Compile and Hot-Reload for Development 
 ```
 
-### Compile and Minify for Production
+---
 
-```sh
-npm run build
-```
+Developed by Víctor Jiménez Corada - [GitHub](https://github.com/vjimcor955).
