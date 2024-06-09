@@ -24,7 +24,7 @@ node -v
 
 ### Clone the Project Repository:
 
-&nbsp;&nbsp;&nbsp;&nbsp;Clone the video processor repository from GitHub. You can clone it either from the IDE or using git clone:
+&nbsp;&nbsp;&nbsp;&nbsp;Clone the Frontend repository from GitHub. You can clone it either from the IDE or using git clone:
 ```
 git clone https://github.com/vjimcor955/benchmark_ffmpeg-frontend.git
 ```
